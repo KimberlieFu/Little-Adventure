@@ -1,0 +1,38 @@
+{
+    "cuphead": {
+        "idle": {
+            "image": "../GameAsset/player/Cuphead/CupheadIdle.png",
+            "frames": 16,
+            "loopFrames": 3
+        },
+        "blink": {
+            "image": "../GameAsset/player/Cuphead/CupheadIdleBlink.png",
+            "frames": 16,
+            "loopFrames": 8
+
+        },
+        "down": {
+            "image": "../GameAsset/player/Cuphead/CupheadDown.png",
+            "frames": 16,
+            "loopFrames": 13
+        },
+        "up": {
+            "image": "../GameAsset/player/Cuphead/CupheadUp.png",
+            "frames": 16,
+            "loopFrames": 16
+        },
+        "right": {
+            "image": "../GameAsset/player/Cuphead/CupheadRight.png",
+            "frames": 16,
+            "loopFrames": 14
+        },
+        "left": {
+            "image": "../GameAsset/player/Cuphead/CupheadLeft.png",
+            "frames": 16,
+            "loopFrames": 14
+        }
+
+
+
+    }
+}

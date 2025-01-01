@@ -7,15 +7,14 @@ class Player extends GameObject {
     constructor(x, y, width, height, context, animations) {
         super(x, y, width, height);
         this.context = context;
-        this.animations = animations; 
+        this.animations = animations;
         this.frame = 0;
-        this.totalFrames = animations.idle.frames; 
+        this.totalFrames = animations.idle.frames;
         this.frameDelay = 10;
         this.frameCounter = 0;
-        this.state = new IdleState(this); 
-        this.keys = { w: false, a: false, s: false, d: false }; 
-        this.movementStrategy = new KeyboardStrategy(); 
-        this.currentAnimation = 'idle'; 
+        this.state = new IdleState(this);
+        this.movementStrategy = new KeyboardStrategy();  // Movement strategy handles key states
+        this.currentAnimation = 'idle';
         this.init();
     }
 
@@ -30,14 +29,20 @@ class Player extends GameObject {
     setAnimation(type) {
         if (this.animations[type]) {
             this.currentAnimation = type;
-            this.frame = 0; 
+            this.frame = 0;
             this.totalFrames = this.animations[type].frames;
         }
     }
 
     init() {
-        window.addEventListener('keydown', (event) => this.movementStrategy.handleKeyDown(event));
-        window.addEventListener('keyup', (event) => this.movementStrategy.handleKeyUp(event));
+        window.addEventListener('keydown', (event) => {
+            console.log(`Key Down in Player: ${event.key}`); // Debugging line
+            this.movementStrategy.handleKeyDown(event);
+        });
+        window.addEventListener('keyup', (event) => {
+            console.log(`Key Up in Player: ${event.key}`); // Debugging line
+            this.movementStrategy.handleKeyUp(event);
+        });
     }
 
     handleInput() {

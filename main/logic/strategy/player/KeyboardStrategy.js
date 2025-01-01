@@ -1,26 +1,27 @@
-import MovementStrategy from './MovementStrategy.js';
-
-class KeyboardStrategy extends MovementStrategy {
+class KeyboardStrategy {
     constructor() {
-        super();
-        this.keys = { w: false, a: false, s: false, d: false };
-        this.speed = 1; 
+        this.keys = { w: false, a: false, s: false, d: false }; // Initialize keys only once
+        this.speed = 2;
     }
 
     // Update key states when keys are pressed
     handleKeyDown(event) {
+        console.log(`Key Down: ${event.key}`);  
         if (event.key === 'w') this.keys.w = true;
         if (event.key === 'a') this.keys.a = true;
         if (event.key === 's') this.keys.s = true;
         if (event.key === 'd') this.keys.d = true;
+        console.log(this.keys); 
     }
 
     // Update key states when keys are released
     handleKeyUp(event) {
+        console.log(`Key Up: ${event.key}`);  
         if (event.key === 'w') this.keys.w = false;
         if (event.key === 'a') this.keys.a = false;
         if (event.key === 's') this.keys.s = false;
         if (event.key === 'd') this.keys.d = false;
+        console.log(this.keys); 
     }
 
     // Move the player based on pressed keys
