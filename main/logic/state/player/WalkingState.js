@@ -3,40 +3,36 @@ import PlayerState from './PlayerState.js';
 class WalkingState extends PlayerState {
     constructor(player) {
         super(player);
-        this.frameTimer = 0;  // Initialize frame timer
-        this.frameDelay = 5;  // Adjust this value to control the animation speed (higher is slower)
-    }
-
-    handleInput() {
-        // Handle input for walking (move based on keys pressed)
-        if (this.player.keys.w) this.player.y -= this.player.speed;
-        if (this.player.keys.a) this.player.x -= this.player.speed;
-        if (this.player.keys.s) this.player.y += this.player.speed;
-        if (this.player.keys.d) this.player.x += this.player.speed;
+        this.frameTimer = 0;  
+        this.frameDelay = 10; 
+        this.loopFrames = player.animations.walking.loopFrames || 16; 
+        this.totalFrames = 16; 
+        this.player.setAnimation('walking');
     }
 
     update() {
-        // Update walking state with animation speed control
         if (this.frameTimer >= this.frameDelay) {
-            this.player.frame = (this.player.frame + 1) % this.player.totalFrames;
-            this.frameTimer = 0; // Reset the frame timer
+            this.player.frame = (this.player.frame + 1) % this.loopFrames; 
+            this.frameTimer = 0; 
         } else {
-            this.frameTimer++; // Increment the frame timer
+            this.frameTimer++;
         }
     }
 
     animate() {
-        const playerFrameWidth = this.player.image.width / 16;
+        const playerFrameWidth = this.player.image.width / this.totalFrames; 
+        const currentFrame = this.player.frame % this.loopFrames; 
+
         this.player.context.drawImage(
             this.player.image,
-            this.player.frame * playerFrameWidth,
+            currentFrame * playerFrameWidth, 
             0,
             playerFrameWidth,
-            this.player.image.height,
-            this.player.x - this.player.width / 2,
+            this.player.image.height, 
+            this.player.x - this.player.width / 2, 
             this.player.y - this.player.height / 2,
             this.player.width,
-            this.player.height
+            this.player.height 
         );
     }
 }

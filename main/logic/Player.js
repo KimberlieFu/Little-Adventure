@@ -30,23 +30,35 @@ class Player extends GameObject {
     setAnimation(type) {
         if (this.animations[type]) {
             this.currentAnimation = type;
-            this.frame = 0; // Reset frame to start of the animation
+            this.frame = 0; 
             this.totalFrames = this.animations[type].frames;
         }
     }
 
     init() {
-        // Add event listeners for keyboard input
         window.addEventListener('keydown', (event) => this.movementStrategy.handleKeyDown(event));
         window.addEventListener('keyup', (event) => this.movementStrategy.handleKeyUp(event));
     }
 
     handleInput() {
-        this.state.handleInput();
+        // Move the player based on key states
+        this.movementStrategy.move(this);
+
+        // State transition logic
+        if (!this.movementStrategy.keys.w && !this.movementStrategy.keys.a && !this.movementStrategy.keys.s && !this.movementStrategy.keys.d) {
+            // If no keys are pressed, switch to IdleState
+            if (this.state.constructor.name !== 'IdleState') {
+                this.setState(new IdleState(this));
+            }
+        } else {
+            // If any key is pressed, switch to WalkingState
+            if (this.state.constructor.name !== 'WalkingState') {
+                this.setState(new WalkingState(this));
+            }
+        }
     }
 
     update() {
-        // Use the movement strategy to move the player
         this.movementStrategy.move(this);
         this.state.update();
     }

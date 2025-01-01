@@ -1,12 +1,10 @@
-// KeyboardStrategy.js
-
 import MovementStrategy from './MovementStrategy.js';
 
 class KeyboardStrategy extends MovementStrategy {
     constructor() {
         super();
         this.keys = { w: false, a: false, s: false, d: false };
-        this.speed = 5; // Movement speed
+        this.speed = 1; 
     }
 
     // Update key states when keys are pressed
