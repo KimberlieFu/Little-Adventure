@@ -22,7 +22,7 @@ export async function initializeGameAssets(canvas, c) {
         const imageSrc = map.image instanceof HTMLImageElement ? map.image.src : map.image;
 
         const mapImage = await loadImage(imageSrc);
-        const camera = new Camera(map.mapWidth, map.mapHeight);
+        const camera = new Camera(map.canvasWidth, map.canvasHeight, map.mapWidth, map.mapHeight);
         const loadedAnimations = await loadCharacterAnimations();
 
         canvas.width = map.canvasWidth;

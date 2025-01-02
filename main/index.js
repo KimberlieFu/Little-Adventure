@@ -13,21 +13,19 @@ async function initializeGame() {
         camera = assets.camera;
         player.addObserver(camera);
 
-        // Ensure the image is fully loaded before rendering
-        mainMap.onload = () => {
+        const onLoadHandler = () => {
             isMapLoaded = true;
             console.log('Map loaded successfully.');
-            animate(); // Start animation after map is loaded
+            animate();
         };
 
-        mainMap.onerror = (error) => {
-            console.error('Error loading map image:', error);
-        };
+        mainMap.onload = onLoadHandler;
+        mainMap.onerror = (error) => console.error('Error loading map image:', error);
 
-        if (mainMap.complete) { // If the image is already loaded
+        if (mainMap.complete) {
             isMapLoaded = true;
             console.log('Map is already loaded.');
-            animate(); // Start animation immediately
+            animate();
         }
 
         console.log('Game assets loaded successfully.');
@@ -36,16 +34,19 @@ async function initializeGame() {
     }
 }
 
+
 // Animation loop
 function animate() {
     c.clearRect(0, 0, canvas.width, canvas.height);
 
     if (isMapLoaded && camera) {
-        console.log(mainMap);
-
+        console.log(`Player position: x: ${player.x}, y: ${player.y}`);
+       
         // Only draw the map after it has been loaded
         c.drawImage(mainMap, -camera.x, -camera.y);
-        console.log(`Camera position: x: ${-camera.x}, y: ${-camera.y}`);
+
+        console.log(`Player position: x: ${player.x}, y: ${player.y}`);
+        console.log(`Camera position: x: ${camera.x}, y: ${camera.y}`);
     }
 
     // Render and update player
