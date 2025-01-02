@@ -54,7 +54,7 @@ async function loadMapConfig() {
             75,
             75,
             c,
-            loadedAnimations // Pass the loaded animations to the player
+            loadedAnimations
         );
         console.log("Player initialized:", player);
         player.setState(new IdleState(player));
@@ -85,10 +85,10 @@ async function loadCharacterAnimations() {
         }
 
         console.log("Player animations loaded:", loadedAnimations);
-        return loadedAnimations; // Return loaded animations to be passed to Player
+        return loadedAnimations; 
     } catch (error) {
         console.error('Error loading character animations:', error);
-        return {}; // Return an empty object in case of error
+        return {}; 
     }
 }
 

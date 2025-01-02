@@ -1,35 +1,61 @@
 class KeyboardStrategy {
     constructor() {
-        this.keys = { w: false, a: false, s: false, d: false }; // Initialize keys only once
-        this.speed = 2;
+        this.keys = { w: false, a: false, s: false, d: false };
+        this.keyQueue = []; 
+        this.speed = 3;
     }
 
-    // Update key states when keys are pressed
+    // Handle key presses
     handleKeyDown(event) {
-        console.log(`Key Down: ${event.key}`);  
-        if (event.key === 'w') this.keys.w = true;
-        if (event.key === 'a') this.keys.a = true;
-        if (event.key === 's') this.keys.s = true;
-        if (event.key === 'd') this.keys.d = true;
-        console.log(this.keys); 
+        const key = event.key.toLowerCase();
+        if (['w', 'a', 's', 'd'].includes(key)) {
+            if (!this.keys[key]) {
+                this.keyQueue.push(key); 
+            }
+            this.keys[key] = true;
+        }
     }
 
-    // Update key states when keys are released
+    // Handle key releases
     handleKeyUp(event) {
-        console.log(`Key Up: ${event.key}`);  
-        if (event.key === 'w') this.keys.w = false;
-        if (event.key === 'a') this.keys.a = false;
-        if (event.key === 's') this.keys.s = false;
-        if (event.key === 'd') this.keys.d = false;
-        console.log(this.keys); 
+        const key = event.key.toLowerCase();
+        if (['w', 'a', 's', 'd'].includes(key)) {
+            this.keys[key] = false; 
+            this.keyQueue = this.keyQueue.filter((k) => k !== key); 
+        }
     }
 
-    // Move the player based on pressed keys
+    // Get the most recent direction, resolving conflicts (e.g., up/down or left/right)
+    getLatestDirection() {
+        let vertical = null;
+        let horizontal = null; 
+
+        // Traverse the queue in reverse to find the most recent conflicting directions
+        for (let i = this.keyQueue.length - 1; i >= 0; i--) {
+            const key = this.keyQueue[i];
+            if (['w', 's'].includes(key) && !vertical) vertical = key;
+            if (['a', 'd'].includes(key) && !horizontal) horizontal = key; 
+            if (vertical && horizontal) break; 
+        }
+
+        // Determine final direction
+        if (vertical && horizontal) return `${vertical}-${horizontal}`; 
+        if (vertical) return vertical; 
+        if (horizontal) return horizontal;
+
+        return null;
+    }
+
+    // Move the player based on the latest direction
     move(player) {
-        if (this.keys.w) player.y -= this.speed; // Move up
-        if (this.keys.s) player.y += this.speed; // Move down
-        if (this.keys.a) player.x -= this.speed; // Move left
-        if (this.keys.d) player.x += this.speed; // Move right
+        const latestDirection = this.getLatestDirection();
+        if (!latestDirection) return;
+
+        // Perform movement based on the latest direction
+        if (latestDirection.includes('w')) player.y -= this.speed; // Move up
+        if (latestDirection.includes('s')) player.y += this.speed; // Move down
+        if (latestDirection.includes('a')) player.x -= this.speed; // Move left
+        if (latestDirection.includes('d')) player.x += this.speed; // Move right
     }
 }
 

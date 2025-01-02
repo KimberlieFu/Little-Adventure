@@ -19,17 +19,17 @@
         "up": {
             "image": "../GameAsset/player/Cuphead/CupheadUp.png",
             "frames": 16,
-            "loopFrames": 16
+            "loopFrames": 12
         },
         "right": {
             "image": "../GameAsset/player/Cuphead/CupheadRight.png",
             "frames": 16,
-            "loopFrames": 14
+            "loopFrames": 10
         },
         "left": {
             "image": "../GameAsset/player/Cuphead/CupheadLeft.png",
             "frames": 16,
-            "loopFrames": 14
+            "loopFrames": 10
         }
 
 

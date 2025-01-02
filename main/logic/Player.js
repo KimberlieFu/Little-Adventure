@@ -13,7 +13,7 @@ class Player extends GameObject {
         this.frameDelay = 10;
         this.frameCounter = 0;
         this.state = new IdleState(this);
-        this.movementStrategy = new KeyboardStrategy();  // Movement strategy handles key states
+        this.movementStrategy = new KeyboardStrategy();  
         this.currentAnimation = 'idle';
         this.init();
     }
@@ -36,11 +36,9 @@ class Player extends GameObject {
 
     init() {
         window.addEventListener('keydown', (event) => {
-            console.log(`Key Down in Player: ${event.key}`); // Debugging line
             this.movementStrategy.handleKeyDown(event);
         });
         window.addEventListener('keyup', (event) => {
-            console.log(`Key Up in Player: ${event.key}`); // Debugging line
             this.movementStrategy.handleKeyUp(event);
         });
     }
