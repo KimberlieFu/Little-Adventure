@@ -6,12 +6,11 @@ class WalkingState extends PlayerState {
         this.frameTimer = 0;
         this.frameDelay = 5;
 
-        // Set initial animation direction
         const direction = this.getAnimationDirection();
-        this.loopFrames = player.animations[direction]?.loopFrames || 16;
-        this.totalFrames = player.animations[direction]?.frames || 16;
-        player.direction = direction;
-        player.setAnimation(direction);
+        this.loopFrames = player.animations[direction].loopFrames || 16;
+        this.totalFrames = player.animations[direction].frames || 16;
+        this.currentAnimation = player.direction || 'down';
+        player.setAnimation(player.direction);
     }
 
     getAnimationDirection() {
@@ -31,13 +30,12 @@ class WalkingState extends PlayerState {
             this.frameTimer++;
         }
 
-        // Check for direction changes
         const newDirection = this.getAnimationDirection();
-        if (this.player.direction !== newDirection) {
+        if (this.currentAnimation !== newDirection) {
             this.player.frame = 0; 
-            this.player.direction = newDirection;
-            this.loopFrames = this.player.animations[newDirection]?.loopFrames || 16; 
-            this.totalFrames = this.player.animations[newDirection]?.frames || 16; 
+            this.currentAnimation = newDirection;
+            this.loopFrames = this.player.animations[newDirection].loopFrames || 16; 
+            this.totalFrames = this.player.animations[newDirection].frames || 16; 
             this.player.setAnimation(newDirection);
         }
     }

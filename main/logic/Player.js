@@ -68,7 +68,6 @@ class Player extends GameObject {
     }
 
     animate() {
-        console.log(this.direction)
         const animation = this.animations[this.currentAnimation];
         const frameWidth = animation.image.width / animation.frames;
 
