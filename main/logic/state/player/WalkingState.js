@@ -18,17 +18,7 @@ class WalkingState extends PlayerState {
         const latestDirection = this.player.movementStrategy.getLatestDirection();
         if (!latestDirection) return this.player.direction || 'down';
 
-        const keyToDirection = {
-            w: 'up',
-            a: 'left',
-            s: 'down',
-            d: 'right',
-            'w-d': 'up-right',
-            'w-a': 'up-left',
-            's-d': 'down-right',
-            's-a': 'down-left',
-        };
-
+        const keyToDirection = this.player.movementStrategy.getKeyToDirection();
         return keyToDirection[latestDirection] || 'down';
     }
 

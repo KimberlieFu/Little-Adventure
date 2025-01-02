@@ -14,6 +14,7 @@ class Player extends GameObject {
         this.frameCounter = 0;
         this.state = new IdleState(this);
         this.movementStrategy = new KeyboardStrategy();  
+        this.direction = null;
         this.currentAnimation = 'idle';
         this.init();
     }
@@ -67,6 +68,7 @@ class Player extends GameObject {
     }
 
     animate() {
+        console.log(this.direction)
         const animation = this.animations[this.currentAnimation];
         const frameWidth = animation.image.width / animation.frames;
 
