@@ -1,11 +1,26 @@
 {
-    "player": {
-        "startX": 500,
-        "startY": 300
+    "main": {
+        "player": {
+            "startX": 100,
+            "startY": 300
+        },
+        "map": {
+            "width": 1024,
+            "height": 576,
+            "image": "../GameAsset/map/MainMap.png"
+        }
     },
-    "map": {
-        "width": 1024,
-        "height": 576,
-        "image": "../GameAsset/map/MainMap.png"
+
+    "forest": {
+        "player": {
+            "startX": 500,
+            "startY": 300
+        },
+        "map": {
+            "width": 1024,
+            "height": 576,
+            "image": "../GameAsset/map/Forest.png"
+        }
+
     }
 }

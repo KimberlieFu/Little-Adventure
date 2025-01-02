@@ -19,6 +19,10 @@ class KeyboardStrategy extends MovementStrategy {
         };
     }
 
+    setSpeed(velocity) {
+        this.speed = velocity;
+    }
+
     // Handle key presses
     handleKeyDown(event) {
         const key = event.key.toLowerCase();

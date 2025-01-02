@@ -16,7 +16,24 @@ class Player extends GameObject {
         this.movementStrategy = new KeyboardStrategy();  
         this.direction = null;
         this.currentAnimation = 'idle';
+        this.observers = []; 
+        this.velocity = 1;
         this.init();
+    }
+
+    addObserver(observer) {
+        this.observers.push(observer);
+    }
+
+    removeObserver(observer) {
+        const index = this.observers.indexOf(observer);
+        if (index > -1) {
+            this.observers.splice(index, 1);
+        }
+    }
+
+    notifyObservers() {
+        this.observers.forEach(observer => observer.update(this));
     }
 
     setState(state) {
@@ -42,6 +59,7 @@ class Player extends GameObject {
         window.addEventListener('keyup', (event) => {
             this.movementStrategy.handleKeyUp(event);
         });
+        this.movementStrategy.setSpeed(this.velocity);
     }
 
     handleInput() {
@@ -65,6 +83,7 @@ class Player extends GameObject {
     update() {
         this.movementStrategy.move(this);
         this.state.update();
+        this.notifyObservers();
     }
 
     animate() {

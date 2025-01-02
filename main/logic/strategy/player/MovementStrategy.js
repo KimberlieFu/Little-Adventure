@@ -6,6 +6,12 @@ class MovementStrategy {
     getKeyToDirection() {
         throw new Error('Key-Direction method must be implemented.');
     }
+
+    setSpeed(velocity) {
+        throw new Error('Set speed method must be implemented.');
+    }
+
+
     
 }
 

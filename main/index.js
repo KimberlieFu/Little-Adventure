@@ -1,108 +1,51 @@
-import Player from './logic/Player.js';
-import Camera from './logic/observer/Camera.js';
-import IdleState from './logic/state/player/IdleState.js';
+import { initializeGameAssets } from './logic/LoadConfig.js';
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
-let mainMap = new Image();
-let player;
-let camera;
+let mainMap, player, camera;
+let isMapLoaded = false;
 
-// Utility function for loading images
-function loadImage(src) {
-    console.log(`Loading image from: ${src}`);
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => {
-            console.log(`Image loaded successfully: ${src}`);
-            resolve(img);
-        };
-        img.onerror = () => {
-            console.error(`Failed to load image: ${src}`);
-            reject(new Error(`Failed to load image: ${src}`));
-        };
-        img.src = src;
-    });
-}
-async function loadMapConfig() {
+async function initializeGame() {
     try {
-        const response = await fetch('file/MapConfig.json');
-        const mapConfig = await response.json();
+        const assets = await initializeGameAssets(canvas, c);
+        mainMap = assets.mapImage;
+        player = assets.player;
+        camera = assets.camera;
+        player.addObserver(camera);
 
-        // Set map properties
-        canvas.width = mapConfig.map.width;
-        canvas.height = mapConfig.map.height;
-        mainMap.src = mapConfig.map.image;
+        // Ensure the image is fully loaded before rendering
+        mainMap.onload = () => {
+            isMapLoaded = true;
+            console.log('Map loaded successfully.');
+            animate(); // Start animation after map is loaded
+        };
 
-        await new Promise((resolve, reject) => {
-            mainMap.onload = () => resolve();
-            mainMap.onerror = () => reject(new Error('Failed to load main map'));
-        });
-        console.log("Main map loaded");
+        mainMap.onerror = (error) => {
+            console.error('Error loading map image:', error);
+        };
 
-        // Initialize camera
-        camera = new Camera(mapConfig.map.width, mapConfig.map.height, canvas.width, canvas.height);
-        console.log("Camera initialized.");
-
-        // Load player animations
-        const loadedAnimations = await loadCharacterAnimations();
-
-        // Now that animations are loaded, initialize player
-        player = new Player(
-            mapConfig.player.startX,
-            mapConfig.player.startY,
-            75,
-            75,
-            c,
-            loadedAnimations
-        );
-        console.log("Player initialized:", player);
-        player.setState(new IdleState(player));
-
-        animate();
-    } catch (error) {
-        console.error('Error loading map config or assets:', error);
-    }
-}
-
-// Load character animations and return them
-async function loadCharacterAnimations() {
-    try {
-        const response = await fetch('file/Character.json');
-        const characterConfig = await response.json();
-
-        const animations = characterConfig.cuphead;
-        const loadedAnimations = {};
-
-        for (const animation in animations) {
-            const { image, frames, loopFrames } = animations[animation];
-            if (image && frames && loopFrames) {
-                const loadedImage = await loadImage(image);
-                loadedAnimations[animation] = { image: loadedImage, frames, loopFrames };
-            } else {
-                console.warn(`Missing data for animation: ${animation}`);
-            }
+        if (mainMap.complete) { // If the image is already loaded
+            isMapLoaded = true;
+            console.log('Map is already loaded.');
+            animate(); // Start animation immediately
         }
 
-        console.log("Player animations loaded:", loadedAnimations);
-        return loadedAnimations; 
+        console.log('Game assets loaded successfully.');
     } catch (error) {
-        console.error('Error loading character animations:', error);
-        return {}; 
+        console.error('Error initializing the game:', error);
     }
 }
-
 
 // Animation loop
 function animate() {
     c.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Update the camera position based on the player's position
-    if (player && camera) {
-        camera.update(player);
+    if (isMapLoaded && camera) {
+        console.log(mainMap);
 
-        // Adjust the map position to the camera's view
+        // Only draw the map after it has been loaded
         c.drawImage(mainMap, -camera.x, -camera.y);
+        console.log(`Camera position: x: ${-camera.x}, y: ${-camera.y}`);
     }
 
     // Render and update player
@@ -115,6 +58,4 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-// Load the configuration
-console.log('Loading map config...');
-loadMapConfig();
+initializeGame();

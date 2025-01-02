@@ -8,11 +8,11 @@ class PlayerState {
     }
 
     update() {
-      
+        throw new Error('Update method must be implemented.');
     }
 
     animate() {
-     
+        throw new Error('Animate method must be implemented.');
     }
 }
 
