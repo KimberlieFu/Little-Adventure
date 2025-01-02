@@ -5,7 +5,7 @@ class KeyboardStrategy extends MovementStrategy {
         super();
         this.keys = { w: false, a: false, s: false, d: false };
         this.keyQueue = [];
-        this.speed = 2.5;
+        this.speed = 1;
 
         this.keyToDirection = {
             w: 'up',
