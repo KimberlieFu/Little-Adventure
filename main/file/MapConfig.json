@@ -1,8 +1,8 @@
 {
     "main": {
         "player": {
-            "startX": 0,
-            "startY": 0
+            "startX": 500,
+            "startY": 300
         },
         "map": {
             "width": 1024,

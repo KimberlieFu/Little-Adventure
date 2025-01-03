@@ -1,38 +1,71 @@
 class Camera {
-  constructor(canvasWidth, canvasHeight, mapWidth, mapHeight, zoom = 1) {
+  constructor(canvasWidth, canvasHeight, mapWidth, mapHeight) {
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
+    this.lerpFactor = 0.5;
+    this.velocity = 0;
+
+
+    this.camerabox = {
+      position: {
+        x: 0,
+        y:0
+      },
+      width: 500,
+      height: 300,
+    }
     this.x = 0;
     this.y = 0;
-    this.lerpFactor = 0.1;
-    this.zoom = 5; // Zoom factor
+    this.velocity = 6;
   }
+
+  setVelocity(velocity) {
+    this.velocity = velocity;  
+  }
+
+  panRight() {
+    const cameraboxRightSide = this.camerabox.position.x + this.camerabox.width;
+    if (cameraboxRightSide >= this.canvasWidth) {
+      this.x -= this.velocity;
+    }
+  }
+
+  panLeft() {
+    const cameraboxLeftSide = this.camerabox.position.x; 
+    if (cameraboxLeftSide < 0) {
+        this.x += this.velocity;
+    }
+}
 
   update(player) {
-    // Adjust the player position by the zoom factor (scaled player position)
-    const scaledPlayerX = player.x * this.zoom;
-    const scaledPlayerY = player.y * this.zoom;
+    this.camerabox.position.x = player.x - 250;
+    this.camerabox.position.y = player.y - 150;
+    this.panRight()
+    this.panLeft()
 
-    // Target position for the camera to center on the player
-    const targetX = scaledPlayerX - this.canvasWidth / 2;
-    const targetY = scaledPlayerY - this.canvasHeight / 2;
-
-    // Smoothly move the camera towards the target position using lerp
-    this.x += (targetX - this.x) * this.lerpFactor;
-    this.y += (targetY - this.y) * this.lerpFactor;
-
-    // Calculate the bounds considering the zoom
-    const maxX = Math.max(0, this.mapWidth * this.zoom - this.canvasWidth);
-    const maxY = Math.max(0, this.mapHeight * this.zoom - this.canvasHeight);
-
-    // Prevent camera from going out of bounds, respecting the zoom
-    this.x = Math.max(0, Math.min(this.x, maxX));
-    this.y = Math.max(0, Math.min(this.y, maxY));
-
-    console.log(`Camera position: x: ${this.x}, y: ${this.y}`);
+    console.log(`Map position: ${this.x}`);
   }
+
+
+  draw(context) {
+    // Save the current canvas state
+    context.save();
+    context.strokeStyle = "red"; 
+    context.lineWidth = 2;
+
+    context.strokeRect(
+        this.camerabox.position.x, 
+        this.camerabox.position.y, 
+        this.camerabox.width,
+        this.camerabox.height
+    );
+
+    // Restore the canvas state
+    context.restore();
+}
+
 
   setZoom(zoom) {
     this.zoom = zoom;

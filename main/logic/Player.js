@@ -81,6 +81,7 @@ class Player extends GameObject {
     }
 
     update() {
+        console.log("Position", this.direction)
         this.movementStrategy.move(this);
         this.state.update();
         this.notifyObservers();
