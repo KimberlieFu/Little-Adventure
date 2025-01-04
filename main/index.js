@@ -47,6 +47,7 @@ function animate() {
     if (isMapLoaded && camera) {
         camera.draw(c);
         mapPositionX = camera.x;
+        mapPositionY = camera.y;
 
       
        

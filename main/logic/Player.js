@@ -17,7 +17,7 @@ class Player extends GameObject {
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
-        this.velocity = 1;
+        this.velocity = 5;
         this.init();
     }
 
@@ -101,6 +101,17 @@ class Player extends GameObject {
             this.y - this.height / 2,
             this.width,
             this.height
+        );
+
+
+        // Draw a green box around the player
+        this.context.strokeStyle = 'green';
+        this.context.lineWidth = 2;       
+        this.context.strokeRect(
+            this.x - this.width / 2,     
+            this.y - this.height / 2,    
+            this.width,                   
+            this.height                  
         );
     }
 }
