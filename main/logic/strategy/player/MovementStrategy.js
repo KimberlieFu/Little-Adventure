@@ -7,12 +7,13 @@ class MovementStrategy {
         throw new Error('Key-Direction method must be implemented.');
     }
 
+    getKeySet() {
+        throw new Error('Key-Set method must be implemented.');
+    }
+
     setSpeed(velocity) {
         throw new Error('Set speed method must be implemented.');
     }
-
-
-    
 }
 
 export default MovementStrategy;

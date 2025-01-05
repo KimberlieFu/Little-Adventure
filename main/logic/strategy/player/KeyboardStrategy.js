@@ -1,11 +1,14 @@
 import MovementStrategy from "./MovementStrategy.js";
 
 class KeyboardStrategy extends MovementStrategy {
-    constructor() {
+    constructor(canvasWidth, canvasHeight) {
         super();
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
         this.keys = { w: false, a: false, s: false, d: false };
         this.keyQueue = [];
-        this.speed = 0.125;
+        this.speed = 1;
+        this.offset = 145;
 
         this.keyToDirection = {
             w: 'up',
@@ -17,6 +20,8 @@ class KeyboardStrategy extends MovementStrategy {
             's-d': 'down-right',
             's-a': 'down-left',
         };
+
+        this.keySet = ['w', 'a', 's', 'd']
     }
 
     setSpeed(velocity) {
@@ -55,7 +60,6 @@ class KeyboardStrategy extends MovementStrategy {
             if (vertical && horizontal) break;
         }
 
-        // Determine final direction
         if (vertical && horizontal) return `${vertical}-${horizontal}`;
         if (vertical) return vertical;
         if (horizontal) return horizontal;
@@ -63,12 +67,14 @@ class KeyboardStrategy extends MovementStrategy {
         return null;
     }
 
-    // Get direction dictionary
     getKeyToDirection() {
         return this.keyToDirection;
     }
 
-    // Move the player based on the latest direction
+    getKeySet() {
+        return this.keySet;
+    }
+
     move(player) {
         const latestDirection = this.getLatestDirection();
         
@@ -80,15 +86,31 @@ class KeyboardStrategy extends MovementStrategy {
         const direction = this.keyToDirection[latestDirection];
 
         // Move the player based on the direction
-        if (direction === 'up') player.y -= this.speed;
-        else if (direction === 'down') player.y += this.speed;
-        else if (direction === 'left') player.x -= this.speed;
-        else if (direction === 'right') player.x += this.speed;
-        else if (direction === 'up-right') { player.x += this.speed; player.y -= this.speed; }
-        else if (direction === 'up-left') { player.x -= this.speed; player.y -= this.speed; }
-        else if (direction === 'down-right') { player.x += this.speed; player.y += this.speed; }
-        else if (direction === 'down-left') { player.x -= this.speed; player.y += this.speed; }
+        if (direction === 'up' && player.y - this.offset > 0) player.y -= this.speed;
+        else if (direction === 'down' && 
+            player.y + this.offset < this.canvasHeight) player.y += this.speed;
+        else if (direction === 'left' && 
+            player.x - this.offset > 0) player.x -= this.speed;
+        else if (direction === 'right' && 
+            player.x + this.offset < this.canvasWidth) player.x += this.speed;
+        else if (direction === 'up-right' ) {
+            if (player.y - this.offset > 0) player.y -= this.speed; 
+            if (player.x + this.offset < this.canvasWidth) player.x += this.speed;
+        }
+        else if (direction === 'up-left') { 
+            if (player.y - this.offset > 0) player.y -= this.speed; 
+            if (player.x - this.offset > 0) player.x -= this.speed;
+        }
+        else if (direction === 'down-right') {
+            if (player.y + this.offset < this.canvasHeight) player.y += this.speed;
+            if (player.x + this.offset < this.canvasWidth) player.x += this.speed;
+        }
+        else if (direction === 'down-left' ) { 
+            if (player.y + this.offset < this.canvasHeight) player.y += this.speed;
+            if (player.x - this.offset > 0) player.x -= this.speed;
+        }
         player.direction = direction;
+
     }
 }
 

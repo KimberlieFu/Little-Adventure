@@ -4,16 +4,17 @@ import IdleState from './state/player/IdleState.js';
 import WalkingState from './state/player/WalkingState.js';
 
 class Player extends GameObject {
-    constructor(x, y, width, height, context, animations) {
+    constructor(x, y, width, height, context, canvasWidth, canvasHeight, animations) {
         super(x, y, width, height);
         this.context = context;
         this.animations = animations;
+        this.keyPressed = false;
         this.frame = 0;
         this.totalFrames = animations.idle.frames;
         this.frameDelay = 10;
         this.frameCounter = 0;
         this.state = new IdleState(this);
-        this.movementStrategy = new KeyboardStrategy();  
+        this.movementStrategy = new KeyboardStrategy(canvasWidth, canvasHeight);  
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
@@ -63,25 +64,22 @@ class Player extends GameObject {
     }
 
     handleInput() {
-        // Move the player based on key states
         this.movementStrategy.move(this);
 
-        // State transition logic
-        if (!this.movementStrategy.keys.w && !this.movementStrategy.keys.a && !this.movementStrategy.keys.s && !this.movementStrategy.keys.d) {
-            // If no keys are pressed, switch to IdleState
+        if (!this.movementStrategy.getKeySet().some(key => this.movementStrategy.keys[key])) {
             if (this.state.constructor.name !== 'IdleState') {
                 this.setState(new IdleState(this));
             }
+            this.keyPressed = false;
         } else {
-            // If any key is pressed, switch to WalkingState
             if (this.state.constructor.name !== 'WalkingState') {
                 this.setState(new WalkingState(this));
             }
+            this.keyPressed = true;
         }
     }
 
     update() {
-        console.log("Position", this.direction)
         this.movementStrategy.move(this);
         this.state.update();
         this.notifyObservers();

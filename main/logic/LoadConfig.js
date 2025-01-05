@@ -22,6 +22,8 @@ export async function initializeGameAssets(canvas, c) {
         const imageSrc = map.image instanceof HTMLImageElement ? map.image.src : map.image;
 
         const mapImage = await loadImage(imageSrc);
+        const mapWidth = map.mapWidth;
+        const mapHeight = map.mapHeight
         const camera = new Camera(map.canvasWidth, map.canvasHeight, map.mapWidth, map.mapHeight, c);
         const loadedAnimations = await loadCharacterAnimations();
 
@@ -32,13 +34,14 @@ export async function initializeGameAssets(canvas, c) {
         const player = new Player(
             playerConfig.startX,  
             playerConfig.startY,  
-            75, 75, c,
+            75, 75, c,  
+            map.canvasWidth, map.canvasHeight,
             loadedAnimations
         );
 
         player.setState(new IdleState(player));
 
-        return { mapImage, camera, player };  
+        return { mapImage, mapWidth, mapHeight, camera, player };  
     } catch (error) {
         console.error('Error initializing game assets:', error);
         throw error;

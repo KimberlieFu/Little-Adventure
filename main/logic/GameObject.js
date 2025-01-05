@@ -5,10 +5,6 @@ class GameObject {
         this.width = width;
         this.height = height;
     }
-
-    draw(c) {
-        throw new Error('Draw method must be implemented.');
-    }
 }
 
 export default GameObject;

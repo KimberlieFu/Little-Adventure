@@ -3,7 +3,7 @@ import { initializeGameAssets } from './logic/LoadConfig.js';
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 let mainMap, player, camera;
-let mapPositionX, mapPositionY;
+let mapPositionX, mapPositionY, mapWidth, mapHeight;
 let isMapLoaded = false;
 
 async function initializeGame() {
@@ -13,6 +13,8 @@ async function initializeGame() {
         mainMap = assets.mapImage;
         player = assets.player;
         camera = assets.camera;
+        mapWidth = assets.mapWidth;
+        mapHeight = assets.mapHeight;
         mapPositionX = 0;
         mapPositionY = 0;
         player.addObserver(camera);
@@ -44,19 +46,12 @@ function animate() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     c.drawImage(mainMap, mapPositionX, mapPositionY);
 
-    if (isMapLoaded && camera) {
+    if (camera) {
         camera.draw(c);
         mapPositionX = camera.x;
         mapPositionY = camera.y;
-
-      
-       
-        // Only draw the map after it has been loaded
-        // c.drawImage(mainMap, -camera.x, -camera.y);
-
     }
 
-    // Render and update player
     if (player) {
         player.handleInput();
         player.update();
