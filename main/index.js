@@ -19,7 +19,7 @@ async function initializeGame() {
         mapHeight = assets.mapHeight;
         mapCollision = assets.mapCollision;
         aspectRatio = assets.aspectRatio;
-        player.addObserver(camera);
+
 
         const onLoadHandler = () => {
             isMapLoaded = true;
@@ -50,21 +50,23 @@ function animate() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     c.drawImage(mainMap, mapPositionX, mapPositionY);
 
-    if (camera) {
-        camera.draw(c);
-        mapPositionX = camera.x;
-        mapPositionY = camera.y;
-    }
+    camera.draw(c);
+    mapPositionX = camera.x;
+    mapPositionY = camera.y;
 
-    if (player) {
-        player.handleInput();
-        player.update();
-        player.animate();
-    }
-
+    mapCollision.forEach(row => {
+        row.forEach((boundary) => {
+            boundary.animate(camera);
+        })
+    })
+ 
+    player.handleInput();
+    player.update();
+    player.animate();
     requestAnimationFrame(animate);
 }
 
+
+
+
 initializeGame();
-// resizeCanvas(); // Initial resize
-// window.addEventListener('resize', resizeCanvas); 

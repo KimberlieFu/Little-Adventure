@@ -44,6 +44,8 @@ export async function initializeGameAssets(canvas, c) {
         );
 
         player.setState(new IdleState(player));
+        player.addObserver(camera);
+        camera.setVelocity(player.velocity);
 
         return { mapImage, mapWidth, mapHeight, mapCollision, camera, player, aspectRatio };  
     } catch (error) {
@@ -99,14 +101,14 @@ function loadCollisionMap(rowTile, mapCollision, width, height, zoom, context) {
     }
 
     collisionMap2D.forEach((row, i) => {
+        const boundaryRow = []; 
         row.forEach((symbol, j) => {
-            if (symbol !== 0) { 
-                boundaryMap2D.push(
-                    new Boundary(j, i, width, height, zoom, context)
-                );
+            if (symbol !== 0) {
+                boundaryRow.push(new Boundary(j, i, width, height, zoom, context)); 
             }
         });
+        boundaryMap2D.push(boundaryRow);
     });
-    console.log(boundaryMap2D)
+    
     return boundaryMap2D; 
 }

@@ -4,7 +4,6 @@ class Camera {
     this.canvasHeight = canvasHeight;
     this.mapWidth = mapWidth;
     this.mapHeight = mapHeight;
-    this.lerpFactor = 0.5;
     this.velocity = 0;
     this.camerabox = {
       position: { x: 0, y:0 },
@@ -13,7 +12,7 @@ class Camera {
     }
     this.x = startX;
     this.y = startY;
-    this.velocity = 6;
+    this.velocity = 1;
   }
 
   setVelocity(velocity) {
@@ -51,7 +50,6 @@ class Camera {
     }
   }
   
-
   update(player) {
     this.camerabox.position.x = player.x - this.camerabox.width / 2;
     this.camerabox.position.y = player.y - this.camerabox.height / 2;
