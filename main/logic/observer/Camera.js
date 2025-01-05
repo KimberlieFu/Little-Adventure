@@ -1,5 +1,5 @@
 class Camera {
-  constructor(canvasWidth, canvasHeight, mapWidth, mapHeight) {
+  constructor(canvasWidth, canvasHeight, mapWidth, mapHeight, startX, startY) {
     this.canvasWidth = canvasWidth;
     this.canvasHeight = canvasHeight;
     this.mapWidth = mapWidth;
@@ -11,8 +11,8 @@ class Camera {
       width: 300,
       height: 300,
     }
-    this.x = 0;
-    this.y = 0;
+    this.x = startX;
+    this.y = startY;
     this.velocity = 6;
   }
 

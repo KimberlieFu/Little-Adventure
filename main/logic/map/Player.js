@@ -1,7 +1,7 @@
 import GameObject from './GameObject.js';
-import KeyboardStrategy from './strategy/player/KeyboardStrategy.js';
-import IdleState from './state/player/IdleState.js';
-import WalkingState from './state/player/WalkingState.js';
+import KeyboardStrategy from '../strategy/player/KeyboardStrategy.js';
+import IdleState from '../state/player/IdleState.js';
+import WalkingState from '../state/player/WalkingState.js';
 
 class Player extends GameObject {
     constructor(x, y, width, height, context, canvasWidth, canvasHeight, animations) {

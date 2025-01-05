@@ -1,7 +1,8 @@
-import JSONMapLoadingStrategy from './strategy/overworld/JSONMapLoadingStrategy.js';
+import JSONMapLoadingStrategy from '../strategy/overworld/JSONMapLoadingStrategy.js';
 import Player from './Player.js';
-import Camera from './observer/Camera.js'
-import IdleState from './state/player/IdleState.js';
+import Camera from '../observer/Camera.js'
+import IdleState from '../state/player/IdleState.js';
+import Boundary from './Boundary.js';
 
 export async function loadMapConfig() {
     try {
@@ -23,13 +24,16 @@ export async function initializeGameAssets(canvas, c) {
 
         const mapImage = await loadImage(imageSrc);
         const mapWidth = map.mapWidth;
-        const mapHeight = map.mapHeight
-        const camera = new Camera(map.canvasWidth, map.canvasHeight, map.mapWidth, map.mapHeight, c);
+        const mapHeight = map.mapHeight;
+        const aspectRatio = mapWidth / mapHeight;        
+        const mapCollision = loadCollisionMap(map.mapRowTile, map.mapCollision, map.mapPixel, map.mapPixel, map.mapZoom, c);
+        
+        const camera = new Camera(map.canvasWidth, map.canvasHeight, map.mapWidth, map.mapHeight, map.mapStartX, map.mapStartY);
         const loadedAnimations = await loadCharacterAnimations();
 
         canvas.width = map.canvasWidth;
         canvas.height = map.canvasHeight;
-
+        
         // Initialize player
         const player = new Player(
             playerConfig.startX,  
@@ -41,7 +45,7 @@ export async function initializeGameAssets(canvas, c) {
 
         player.setState(new IdleState(player));
 
-        return { mapImage, mapWidth, mapHeight, camera, player };  
+        return { mapImage, mapWidth, mapHeight, mapCollision, camera, player, aspectRatio };  
     } catch (error) {
         console.error('Error initializing game assets:', error);
         throw error;
@@ -80,4 +84,29 @@ function loadImage(src) {
         img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
         img.src = src;
     });
+}
+
+function loadCollisionMap(rowTile, mapCollision, width, height, zoom, context) {
+    const numRows = Math.ceil(mapCollision.length / rowTile);
+    const collisionMap2D = [];
+    const boundaryMap2D = [];
+
+    for (let row = 0; row < numRows; row++) {
+        const rowStart = row * rowTile; 
+        const rowEnd = Math.min(rowStart + rowTile, mapCollision.length); 
+        const rowData = mapCollision.slice(rowStart, rowEnd);
+        collisionMap2D.push(rowData); 
+    }
+
+    collisionMap2D.forEach((row, i) => {
+        row.forEach((symbol, j) => {
+            if (symbol !== 0) { 
+                boundaryMap2D.push(
+                    new Boundary(j, i, width, height, zoom, context)
+                );
+            }
+        });
+    });
+    console.log(boundaryMap2D)
+    return boundaryMap2D; 
 }
