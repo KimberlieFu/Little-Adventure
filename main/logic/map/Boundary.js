@@ -8,15 +8,17 @@ class Boundary extends GameObject {
         this.height = height * this.zoom;
         this.originalX = x * width * this.zoom;  
         this.originalY = y * height * this.zoom; 
+        this.adjustedX = 0;
+        this.adjustedY = 0;
         this.context = context;
     }
 
     animate(camera) {
-        const adjustedX = this.originalX + camera.x;
-        const adjustedY = this.originalY + camera.y;
+        this.adjustedX = this.originalX + camera.x;
+        this.adjustedY = this.originalY + camera.y;
         
         this.context.fillStyle = "rgba(255, 0, 0, 0.5)";
-        this.context.fillRect(adjustedX, adjustedY, this.width, this.height);
+        this.context.fillRect(this.adjustedX, this.adjustedY, this.width, this.height);
     }
 }
 

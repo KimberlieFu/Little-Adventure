@@ -4,21 +4,22 @@ import IdleState from '../state/player/IdleState.js';
 import WalkingState from '../state/player/WalkingState.js';
 
 class Player extends GameObject {
-    constructor(x, y, width, height, context, canvasWidth, canvasHeight, animations) {
+    constructor(x, y, width, height, context, canvasWidth, canvasHeight, animations, mapCollision) {
         super(x, y, width, height);
-        this.context = context;
         this.animations = animations;
         this.keyPressed = false;
         this.frame = 0;
         this.totalFrames = animations.idle.frames;
         this.frameDelay = 10;
         this.frameCounter = 0;
+        this.mapCollision = mapCollision;
+        this.context = context;
         this.state = new IdleState(this);
-        this.movementStrategy = new KeyboardStrategy(canvasWidth, canvasHeight);  
+        this.movementStrategy = new KeyboardStrategy(canvasWidth, canvasHeight, mapCollision);  
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
-        this.velocity = 10;
+        this.velocity = 5;
         this.init();
     }
 

@@ -1,10 +1,11 @@
 import MovementStrategy from "./MovementStrategy.js";
 
 class KeyboardStrategy extends MovementStrategy {
-    constructor(canvasWidth, canvasHeight) {
+    constructor(canvasWidth, canvasHeight, mapCollision) {
         super();
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
+        this.mapCollision = mapCollision;
         this.keys = { w: false, a: false, s: false, d: false };
         this.keyQueue = [];
         this.speed = 1;
@@ -75,6 +76,23 @@ class KeyboardStrategy extends MovementStrategy {
         return this.keySet;
     }
 
+    checkCollision(player) {
+        for (const row of this.mapCollision) {
+            for (const boundary of row) {
+                if (
+                    player.x < boundary.adjustedX + boundary.width &&
+                    player.x + player.width > boundary.adjustedX &&
+                    player.y < boundary.adjustedY + boundary.height &&
+                    player.y + player.height > boundary.adjustedY
+                ) {
+                    return true; 
+                }
+            }
+        }
+        return false; 
+    }
+    
+
     move(player) {
         const latestDirection = this.getLatestDirection();
         
@@ -82,6 +100,8 @@ class KeyboardStrategy extends MovementStrategy {
             player.direction = null; 
             return; 
         }
+
+        console.log(this.checkCollision(player))
 
         const direction = this.keyToDirection[latestDirection];
 

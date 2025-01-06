@@ -40,7 +40,7 @@ export async function initializeGameAssets(canvas, c) {
             playerConfig.startY,  
             75, 75, c,  
             map.canvasWidth, map.canvasHeight,
-            loadedAnimations
+            loadedAnimations, mapCollision
         );
 
         player.setState(new IdleState(player));
