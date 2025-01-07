@@ -1,6 +1,6 @@
 import MovementStrategy from "./MovementStrategy.js";
 
-class KeyboardStrategy extends MovementStrategy {
+class OverworldStrategy extends MovementStrategy {
     constructor(canvasWidth, canvasHeight, mapCollision) {
         super();
         this.canvasWidth = canvasWidth;
@@ -79,11 +79,21 @@ class KeyboardStrategy extends MovementStrategy {
     checkCollision(player) {
         for (const row of this.mapCollision) {
             for (const boundary of row) {
+                const playerRight = player.x + (player.width / 2);
+                const playerLeft = player.x - (player.width / 2); 
+                const playerUp = player.y - (player.height / 2); 
+                const playerDown = player.y + (player.height / 2); 
+
+                const boundaryRight = boundary.adjustedX + boundary.width;
+                const boundaryLeft = boundary.adjustedX;
+                const boundaryUp = boundary.adjustedY;
+                const boundaryDown = boundary.adjustedY + boundary.height;
+
                 if (
-                    player.x < boundary.adjustedX + boundary.width &&
-                    player.x + player.width > boundary.adjustedX &&
-                    player.y < boundary.adjustedY + boundary.height &&
-                    player.y + player.height > boundary.adjustedY
+                    playerRight > boundaryLeft && 
+                    playerLeft < boundaryRight &&
+                    playerDown > boundaryUp && 
+                    playerUp < boundaryDown
                 ) {
                     return true; 
                 }
@@ -102,6 +112,12 @@ class KeyboardStrategy extends MovementStrategy {
         }
 
         console.log(this.checkCollision(player))
+
+        // if (this.checkCollision(player)) {
+        //     return;
+        // }
+
+       
 
         const direction = this.keyToDirection[latestDirection];
 
@@ -129,9 +145,10 @@ class KeyboardStrategy extends MovementStrategy {
             if (player.y + this.offset < this.canvasHeight) player.y += this.speed;
             if (player.x - this.offset > 0) player.x -= this.speed;
         }
-        player.direction = direction;
+            player.direction = direction;
+        
 
     }
 }
 
-export default KeyboardStrategy;
+export default OverworldStrategy;

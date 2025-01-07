@@ -1,7 +1,7 @@
 import GameObject from './GameObject.js';
-import KeyboardStrategy from '../strategy/player/KeyboardStrategy.js';
 import IdleState from '../state/player/IdleState.js';
 import WalkingState from '../state/player/WalkingState.js';
+import OverworldStrategy from '../strategy/player/OverworldStrategy.js';
 
 class Player extends GameObject {
     constructor(x, y, width, height, context, canvasWidth, canvasHeight, animations, mapCollision) {
@@ -15,11 +15,11 @@ class Player extends GameObject {
         this.mapCollision = mapCollision;
         this.context = context;
         this.state = new IdleState(this);
-        this.movementStrategy = new KeyboardStrategy(canvasWidth, canvasHeight, mapCollision);  
+        this.movementStrategy = new OverworldStrategy(canvasWidth, canvasHeight, mapCollision);  
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
-        this.velocity = 5;
+        this.velocity = 3;
         this.init();
     }
 
@@ -112,6 +112,13 @@ class Player extends GameObject {
             this.width,                   
             this.height                  
         );
+
+        // Draw a circle at the player's x, y position
+        this.context.beginPath();
+        this.context.arc(this.x, this.y, 5, 0, 2 * Math.PI); // Circle with radius 5
+        this.context.fillStyle = 'blue';
+        this.context.fill();
+        this.context.closePath();
     }
 }
 
