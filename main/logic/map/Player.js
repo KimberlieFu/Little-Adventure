@@ -16,10 +16,11 @@ class Player extends GameObject {
         this.context = context;
         this.state = new IdleState(this);
         this.movementStrategy = new OverworldStrategy(canvasWidth, canvasHeight, mapCollision, camera);  
+        this.canMove = true;
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
-        this.velocity = 3;
+        this.velocity = 5;
         this.init();
     }
 

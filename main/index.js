@@ -63,7 +63,6 @@ function animate() {
     player.update();
     player.animate();
     player.handleInput();
-   
     requestAnimationFrame(animate);
 }
 
