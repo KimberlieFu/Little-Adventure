@@ -5,8 +5,8 @@
             "startY": 288
         },
         "map": {
-            "startX": -4000,
-            "startY": -400,
+            "startX": -5500,
+            "startY": -1500,
             "width": 1024,
             "height": 576,
             "zoom" : 400,

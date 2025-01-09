@@ -4,7 +4,7 @@ import WalkingState from '../state/player/WalkingState.js';
 import OverworldStrategy from '../strategy/player/OverworldStrategy.js';
 
 class Player extends GameObject {
-    constructor(x, y, width, height, context, canvasWidth, canvasHeight, animations, mapCollision) {
+    constructor(x, y, width, height, context, canvasWidth, canvasHeight, animations, mapCollision, camera) {
         super(x, y, width, height);
         this.animations = animations;
         this.keyPressed = false;
@@ -15,7 +15,7 @@ class Player extends GameObject {
         this.mapCollision = mapCollision;
         this.context = context;
         this.state = new IdleState(this);
-        this.movementStrategy = new OverworldStrategy(canvasWidth, canvasHeight, mapCollision);  
+        this.movementStrategy = new OverworldStrategy(canvasWidth, canvasHeight, mapCollision, camera);  
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
@@ -55,13 +55,13 @@ class Player extends GameObject {
     }
 
     init() {
+        this.movementStrategy.setSpeed(this.velocity);
         window.addEventListener('keydown', (event) => {
             this.movementStrategy.handleKeyDown(event);
         });
         window.addEventListener('keyup', (event) => {
             this.movementStrategy.handleKeyUp(event);
         });
-        this.movementStrategy.setSpeed(this.velocity);
     }
 
     handleInput() {

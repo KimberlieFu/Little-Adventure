@@ -7,7 +7,7 @@ class Camera {
     this.velocity = 0;
     this.camerabox = {
       position: { x: 0, y:0 },
-      width: 300,
+      width: 800,
       height: 300,
     }
     this.x = startX;

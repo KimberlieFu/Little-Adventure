@@ -59,14 +59,12 @@ function animate() {
             boundary.animate(camera);
         })
     })
- 
-    player.handleInput();
+    
     player.update();
     player.animate();
+    player.handleInput();
+   
     requestAnimationFrame(animate);
 }
-
-
-
 
 initializeGame();

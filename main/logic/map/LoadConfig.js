@@ -40,7 +40,7 @@ export async function initializeGameAssets(canvas, c) {
             playerConfig.startY,  
             75, 75, c,  
             map.canvasWidth, map.canvasHeight,
-            loadedAnimations, mapCollision
+            loadedAnimations, mapCollision, camera
         );
 
         player.setState(new IdleState(player));
@@ -92,7 +92,6 @@ function loadCollisionMap(rowTile, mapCollision, width, height, zoom, context) {
     const numRows = Math.ceil(mapCollision.length / rowTile);
     const collisionMap2D = [];
     const boundaryMap2D = [];
-    let boundaryCreated = false; // Flag to ensure only one boundary is created
 
     for (let row = 0; row < numRows; row++) {
         const rowStart = row * rowTile; 
@@ -101,17 +100,15 @@ function loadCollisionMap(rowTile, mapCollision, width, height, zoom, context) {
         collisionMap2D.push(rowData); 
     }
 
-    for (let i = 0; i < collisionMap2D.length && !boundaryCreated; i++) {
-        const row = collisionMap2D[i];
-        const boundaryRow = [];
-        for (let j = 0; j < row.length && !boundaryCreated; j++) {
-            if (j === 67 && i == 12) { // Only create a boundary in the third column
-                boundaryRow.push(new Boundary(j, i, width, height, zoom, context));
-                boundaryMap2D.push(boundaryRow);
-                boundaryCreated = true; // Set the flag to true after creating the boundary
+    collisionMap2D.forEach((row, i) => {
+        const boundaryRow = []; 
+        row.forEach((symbol, j) => {
+            if (symbol !== 0) {
+                boundaryRow.push(new Boundary(j, i, width, height, zoom, context)); 
             }
-        }
-    }
-
+        });
+        boundaryMap2D.push(boundaryRow);
+    });
+    
     return boundaryMap2D; 
 }

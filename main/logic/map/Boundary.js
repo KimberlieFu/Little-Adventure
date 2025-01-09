@@ -19,14 +19,6 @@ class Boundary extends GameObject {
         
         this.context.fillStyle = "rgba(255, 0, 0, 0.5)";
         this.context.fillRect(this.adjustedX, this.adjustedY, this.width, this.height);
-
-
-        // Draw a circle at the boundary's top-left corner
-        this.context.beginPath();
-        this.context.arc(this.adjustedX, this.adjustedY, 5, 0, Math.PI * 2); // Circle of radius 5
-        this.context.fillStyle = "blue";
-        this.context.fill();
-        this.context.closePath();
     }
 }
 

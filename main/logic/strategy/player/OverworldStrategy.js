@@ -1,7 +1,7 @@
 import MovementStrategy from "./MovementStrategy.js";
 
 class OverworldStrategy extends MovementStrategy {
-    constructor(canvasWidth, canvasHeight, mapCollision) {
+    constructor(canvasWidth, canvasHeight, mapCollision, camera) {
         super();
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
@@ -9,7 +9,8 @@ class OverworldStrategy extends MovementStrategy {
         this.keys = { w: false, a: false, s: false, d: false };
         this.keyQueue = [];
         this.speed = 1;
-        this.offset = 145;
+        this.offsetX = (camera.camerabox.width / 2) - 1;
+        this.offsetY = (camera.camerabox.height / 2) - 1;
 
         this.keyToDirection = {
             w: 'up',
@@ -122,28 +123,28 @@ class OverworldStrategy extends MovementStrategy {
         const direction = this.keyToDirection[latestDirection];
 
         // Move the player based on the direction
-        if (direction === 'up' && player.y - this.offset > 0) player.y -= this.speed;
+        if (direction === 'up' && player.y - this.offsetY > 0) player.y -= this.speed;
         else if (direction === 'down' && 
-            player.y + this.offset < this.canvasHeight) player.y += this.speed;
+            player.y + this.offsetY < this.canvasHeight) player.y += this.speed;
         else if (direction === 'left' && 
-            player.x - this.offset > 0) player.x -= this.speed;
+            player.x - this.offsetX > 0) player.x -= this.speed;
         else if (direction === 'right' && 
-            player.x + this.offset < this.canvasWidth) player.x += this.speed;
+            player.x + this.offsetX < this.canvasWidth) player.x += this.speed;
         else if (direction === 'up-right' ) {
-            if (player.y - this.offset > 0) player.y -= this.speed; 
-            if (player.x + this.offset < this.canvasWidth) player.x += this.speed;
+            if (player.y - this.offsetY > 0) player.y -= this.speed; 
+            if (player.x + this.offsetX < this.canvasWidth) player.x += this.speed;
         }
         else if (direction === 'up-left') { 
-            if (player.y - this.offset > 0) player.y -= this.speed; 
-            if (player.x - this.offset > 0) player.x -= this.speed;
+            if (player.y - this.offsetY > 0) player.y -= this.speed; 
+            if (player.x - this.offsetX > 0) player.x -= this.speed;
         }
         else if (direction === 'down-right') {
-            if (player.y + this.offset < this.canvasHeight) player.y += this.speed;
-            if (player.x + this.offset < this.canvasWidth) player.x += this.speed;
+            if (player.y + this.offsetY < this.canvasHeight) player.y += this.speed;
+            if (player.x + this.offsetX < this.canvasWidth) player.x += this.speed;
         }
         else if (direction === 'down-left' ) { 
-            if (player.y + this.offset < this.canvasHeight) player.y += this.speed;
-            if (player.x - this.offset > 0) player.x -= this.speed;
+            if (player.y + this.offsetY < this.canvasHeight) player.y += this.speed;
+            if (player.x - this.offsetX > 0) player.x -= this.speed;
         }
             player.direction = direction;
         
