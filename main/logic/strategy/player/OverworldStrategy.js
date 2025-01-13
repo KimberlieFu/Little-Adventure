@@ -10,8 +10,8 @@ class OverworldStrategy extends MovementStrategy {
         this.keys = { w: false, a: false, s: false, d: false };
         this.keyQueue = [];
         this.speed = 1;
-        this.offsetX = (camera.camerabox.width / 2) - 1;
-        this.offsetY = (camera.camerabox.height / 2) - 1;
+        this.offsetX = (camera.camerabox.width / 2) - 0.005;
+        this.offsetY = (camera.camerabox.height / 2)- 0.005;
 
         this.keyToDirection = {
             w: 'up',
@@ -106,7 +106,6 @@ class OverworldStrategy extends MovementStrategy {
         return false; 
     }
     
-
     checkPlayerCollision(player, direction) {
         let newX = player.x 
         let newY = player.y
@@ -148,13 +147,14 @@ class OverworldStrategy extends MovementStrategy {
         
         if (!latestDirection) {
             player.direction = null; 
-            return; 
+            return false; 
         }
         const direction = this.keyToDirection[latestDirection];
         const [newX, newY] = this.checkPlayerCollision(player, direction);
         player.x = newX;
         player.y = newY;
         player.direction = direction;
+        return true;
     }
 }
 

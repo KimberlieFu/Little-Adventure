@@ -83,9 +83,10 @@ class Player extends GameObject {
     }
 
     update() {
+        this.notifyObservers();
         this.movementStrategy.move(this);
         this.state.update();
-        this.notifyObservers();
+
     }
 
     animate() {
