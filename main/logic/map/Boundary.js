@@ -13,12 +13,13 @@ class Boundary extends GameObject {
         this.context = context;
     }
 
-    animate(camera) {
+    update(camera) {
         this.adjustedX = this.originalX + camera.x;
         this.adjustedY = this.originalY + camera.y;
         
         this.context.fillStyle = "rgba(255, 0, 0, 0.5)";
         this.context.fillRect(this.adjustedX, this.adjustedY, this.width, this.height);
+    
     }
 }
 

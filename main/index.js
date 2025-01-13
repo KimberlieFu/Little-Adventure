@@ -19,6 +19,7 @@ async function initializeGame() {
         mapHeight = assets.mapHeight;
         mapCollision = assets.mapCollision;
         aspectRatio = assets.aspectRatio;
+        mapPositionX, mapPositionY = 0, 0;
 
 
         const onLoadHandler = () => {
@@ -56,7 +57,7 @@ function animate() {
 
     mapCollision.forEach(row => {
         row.forEach((boundary) => {
-            boundary.animate(camera);
+            boundary.update(camera);
         })
     })
     
