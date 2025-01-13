@@ -7,8 +7,8 @@ class Camera {
     this.velocity = 0;
     this.camerabox = {
       position: { x: 0, y:0 },
-      width: 800,
-      height: 300,
+      width: 500,
+      height: 100,
     }
     this.x = startX;
     this.y = startY;
@@ -24,7 +24,11 @@ class Camera {
     const cameraboxLeftSide = this.camerabox.position.x;
     const cameraboxUpSide = this.camerabox.position.y;
     const cameraboxDownSide = this.camerabox.position.y + this.camerabox.height;
-  
+
+    if (player.movementStrategy.checkCollision(player, player.x, player.y)) {
+      return 
+    }
+
     // Pan right
     if (cameraboxRightSide >= this.canvasWidth && Math.abs(this.x) < this.mapWidth - this.canvasWidth && 
        (player.direction === 'right' || player.direction === 'up-right' || player.direction === 'down-right')) {
@@ -54,9 +58,7 @@ class Camera {
     this.camerabox.position.x = player.x - this.camerabox.width / 2;
     this.camerabox.position.y = player.y - this.camerabox.height / 2;
     if (player.keyPressed === true) this.pan(player);
-
   }
-
 
   draw(context) {
     context.save();
@@ -71,7 +73,6 @@ class Camera {
     );
     context.restore();
   }
-
 
   setZoom(zoom) {
     this.zoom = zoom;

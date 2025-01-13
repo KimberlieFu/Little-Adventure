@@ -6,6 +6,7 @@ class OverworldStrategy extends MovementStrategy {
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.mapCollision = mapCollision;
+        this.camera = camera;
         this.keys = { w: false, a: false, s: false, d: false };
         this.keyQueue = [];
         this.speed = 1;
@@ -72,37 +73,39 @@ class OverworldStrategy extends MovementStrategy {
     getKeyToDirection() {
         return this.keyToDirection;
     }
-
     getKeySet() {
         return this.keySet;
     }
 
     checkCollision(player, positionX, positionY) {
+        const adjustedPositionX = positionX 
+        const adjustedPositionY = positionY 
+    
         for (const row of this.mapCollision) {
             for (const boundary of row) {
-                const playerRight = positionX + (player.width / 2);
-                const playerLeft = positionX - (player.width / 2); 
-                const playerUp = positionY - (player.height / 2); 
-                const playerDown = positionY + (player.height / 2); 
-
+                const playerRight = adjustedPositionX + (player.width / 2);
+                const playerLeft = adjustedPositionX - (player.width / 2); 
+                const playerUp = adjustedPositionY - (player.height / 2); 
+                const playerDown = adjustedPositionY + (player.height / 2); 
+    
                 const boundaryRight = boundary.adjustedX + boundary.width;
                 const boundaryLeft = boundary.adjustedX;
                 const boundaryUp = boundary.adjustedY;
                 const boundaryDown = boundary.adjustedY + boundary.height;
-
-              
+    
                 if (
                     playerRight > boundaryLeft && 
                     playerLeft < boundaryRight &&
                     playerDown > boundaryUp && 
                     playerUp < boundaryDown
                 ) {
-                    return true; 
+                    return true;
                 }
             }
         }
         return false; 
     }
+    
 
     checkPlayerCollision(player, direction) {
         let newX = player.x 
@@ -133,10 +136,11 @@ class OverworldStrategy extends MovementStrategy {
             if (player.x - this.offsetX > 0) newX -= this.speed;
         }
 
-        if (!this.checkCollision(player, newX, newY)) {
-            return [newX, newY];  
+        if (this.checkCollision(player, newX, newY)) {
+            console.log("Collision detected at", { x: newX, y: newY });
+            return [player.x, player.y]; 
         }
-        return [player.x, player.y];
+        return [newX, newY]; 
     }
 
     move(player) {
