@@ -38,7 +38,7 @@ export async function initializeGameAssets(canvas, c) {
         const player = new Player(
             playerConfig.startX,  
             playerConfig.startY,  
-            75, 75, c,  
+            60, 60, c,  
             map.canvasWidth, map.canvasHeight,
             loadedAnimations, mapCollision, camera
         );

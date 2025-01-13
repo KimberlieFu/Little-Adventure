@@ -136,7 +136,6 @@ class OverworldStrategy extends MovementStrategy {
         }
 
         if (this.checkCollision(player, newX, newY)) {
-            console.log("Collision detected at", { x: newX, y: newY });
             return [player.x, player.y]; 
         }
         return [newX, newY]; 

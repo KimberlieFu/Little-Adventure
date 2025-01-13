@@ -5,11 +5,11 @@
             "startY": 288
         },
         "map": {
-            "startX": -5500,
-            "startY": -1500,
+            "startX": -4000,
+            "startY": -1200,
             "width": 1024,
             "height": 576,
-            "zoom" : 400,
+            "zoom" : 350,
             "pixel" : 16,
             "image": "../GameAsset/map/MainMap.png",
             "rowTile": 120,
