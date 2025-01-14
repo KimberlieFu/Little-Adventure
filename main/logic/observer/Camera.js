@@ -13,6 +13,7 @@ class Camera {
     this.x = startX;
     this.y = startY;
     this.velocity = 1;
+    this.cameraPan = false;
   }
 
   setVelocity(velocity) {
@@ -20,6 +21,7 @@ class Camera {
   }
 
   pan(player) {
+    let cameraMove = false;
     const cameraboxRightSide = this.camerabox.position.x + this.camerabox.width;
     const cameraboxLeftSide = this.camerabox.position.x;
     const cameraboxUpSide = this.camerabox.position.y;
@@ -33,6 +35,7 @@ class Camera {
 
         if (!player.movementStrategy.checkCollision(player, newPlayerX, player.y) && !player.movementStrategy.checkCollision(player, newPlayerX, player.y)) {
             this.x = newCameraX; 
+            cameraMove = true;
         }
     }
     // Pan left
@@ -43,6 +46,7 @@ class Camera {
 
         if (!player.movementStrategy.checkCollision(player, newPlayerX, player.y)) {
             this.x = newCameraX; 
+            cameraMove = true;
         }
     }
     // Pan up
@@ -53,6 +57,7 @@ class Camera {
 
         if (!player.movementStrategy.checkCollision(player, player.x, newPlayerY)) {
             this.y = newCameraY; 
+            cameraMove = true;
         }
     }
     // Pan down
@@ -63,11 +68,16 @@ class Camera {
 
         if (!player.movementStrategy.checkCollision(player, player.x, newPlayerY)) {
             this.y = newCameraY;
+            cameraMove = true;
         }
     }
+    if (cameraMove) {
+      this.cameraPan = true;
+      return;
+    }
+    this.cameraPan = false;
   }
 
-  
   update(player) {
     this.camerabox.position.x = player.x - this.camerabox.width / 2;
     this.camerabox.position.y = player.y - this.camerabox.height / 2;

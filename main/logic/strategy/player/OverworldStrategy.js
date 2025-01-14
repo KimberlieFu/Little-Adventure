@@ -109,30 +109,43 @@ class OverworldStrategy extends MovementStrategy {
     checkPlayerCollision(player, direction) {
         let newX = player.x 
         let newY = player.y
+        const playerRightSide = player.x + (player.width / 2);
+        const playerLeftSide = player.x - (player.width / 2);
+        const playerUpSide = player.y - (player.height / 2);
+        const playerDownSide = player.y + (player.height / 2);
 
         // Move the player based on the direction
-        if (direction === 'up' && player.y - this.offsetY > 0) newY -= this.speed;
-        else if (direction === 'down' && 
-            player.y + this.offsetY < this.canvasHeight) newY += this.speed;
-        else if (direction === 'left' && 
-            player.x - this.offsetX > 0) newX -= this.speed;
-        else if (direction === 'right' && 
-            player.x + this.offsetX < this.canvasWidth) newX += this.speed;
-        else if (direction === 'up-right' ) {
-            if (player.y - this.offsetY > 0) newY -= this.speed; 
-            if (player.x + this.offsetX < this.canvasWidth) newX += this.speed;
+        if (direction === 'up' && playerUpSide > 0) {
+            newY -= this.speed;
+        } else if (direction === 'down' && playerDownSide < this.canvasHeight) {
+            newY += this.speed;
+        } else if (direction === 'left' && playerLeftSide > 0) {
+            newX -= this.speed;
+        } else if (direction === 'right' && playerRightSide < this.canvasWidth) {
+            newX += this.speed;
+        } else if (direction === 'up-right' && playerUpSide > 0 && playerRightSide < this.canvasWidth) {
+            newY -= this.speed / 2; 
+            newX += this.speed / 2; 
+        } else if (direction === 'up-left' && playerUpSide > 0 && playerLeftSide > 0) {
+            newY -= this.speed / 2; 
+            newX -= this.speed / 2; 
+        } else if (direction === 'down-right' && playerDownSide < this.canvasHeight && playerRightSide < this.canvasWidth) {
+            newY += this.speed / 2; 
+            newX += this.speed / 2; 
+        } else if (direction === 'down-left' && playerDownSide < this.canvasHeight && playerLeftSide > 0) {
+            newY += this.speed / 2; 
+            newX -= this.speed / 2; 
         }
-        else if (direction === 'up-left') { 
-            if (player.y - this.offsetY > 0) newY -= this.speed; 
-            if (player.x - this.offsetX > 0) newX -= this.speed;
-        }
-        else if (direction === 'down-right') {
-            if (player.y + this.offsetY < this.canvasHeight) newY += this.speed;
-            if (player.x + this.offsetX < this.canvasWidth) newX += this.speed;
-        }
-        else if (direction === 'down-left' ) { 
-            if (player.y + this.offsetY < this.canvasHeight) newY += this.speed;
-            if (player.x - this.offsetX > 0) newX -= this.speed;
+
+        // Handle movement based on direction
+        if (this.camera.cameraPan) {
+            if (direction === 'up' || direction === "down") {
+                return [newX, player.y];
+            } else if (direction === 'left' || direction === "right") {
+                return [player.x, newY];
+            } else {
+                return [player.x, player.y]; 
+            }
         }
 
         if (this.checkCollision(player, newX, newY)) {
