@@ -21,7 +21,7 @@ class Player extends GameObject {
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
-        this.velocity = 10;
+        this.velocity = 15;
         this.init();
     }
 
@@ -86,7 +86,6 @@ class Player extends GameObject {
         this.notifyObservers();
         this.movementStrategy.move(this);
         this.state.update();
-
     }
 
     animate() {
@@ -116,9 +115,9 @@ class Player extends GameObject {
             this.height                  
         );
 
-        // Draw a circle at the player's x, y position
+     
         this.context.beginPath();
-        this.context.arc(this.x, this.y, 5, 0, 2 * Math.PI); // Circle with radius 5
+        this.context.arc(this.x, this.y, 5, 0, 2 * Math.PI);
         this.context.fillStyle = 'blue';
         this.context.fill();
         this.context.closePath();

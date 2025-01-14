@@ -137,17 +137,16 @@ class OverworldStrategy extends MovementStrategy {
             newX -= this.speed / 2; 
         }
 
-        // Handle movement based on direction
         if (this.camera.cameraPan) {
-            if (direction === 'up' || direction === "down") {
-                return [newX, player.y];
-            } else if (direction === 'left' || direction === "right") {
-                return [player.x, newY];
+            if (direction === 'up' || direction === 'down') {
+                newY = player.y;
+            } else if (direction === 'left' || direction === 'right') {
+                newX = player.x;
             } else {
-                return [player.x, player.y]; 
+                newY = player.y;
+                newX = player.x;
             }
         }
-
         if (this.checkCollision(player, newX, newY)) {
             return [player.x, player.y]; 
         }
@@ -162,10 +161,10 @@ class OverworldStrategy extends MovementStrategy {
             return false; 
         }
         const direction = this.keyToDirection[latestDirection];
+        player.direction = direction;
         const [newX, newY] = this.checkPlayerCollision(player, direction);
         player.x = newX;
         player.y = newY;
-        player.direction = direction;
         return true;
     }
 }

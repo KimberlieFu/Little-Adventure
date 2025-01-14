@@ -81,7 +81,7 @@ class Camera {
   update(player) {
     this.camerabox.position.x = player.x - this.camerabox.width / 2;
     this.camerabox.position.y = player.y - this.camerabox.height / 2;
-    if (player.keyPressed === true) this.pan(player);
+    this.pan(player);
   }
 
   draw(context) {
@@ -95,6 +95,14 @@ class Camera {
         this.camerabox.width,
         this.camerabox.height
     );
+
+
+    context.beginPath();
+    context.moveTo(this.camerabox.position.x + this.camerabox.width, this.camerabox.position.y); // Top right corner
+    context.lineTo(this.camerabox.position.x + this.camerabox.width, this.camerabox.position.y + this.camerabox.height); // Bottom right corner
+    context.strokeStyle = "blue"; // Use a different color for clarity
+    context.stroke();
+
     context.restore();
   }
 
