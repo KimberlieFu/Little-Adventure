@@ -3,7 +3,6 @@ import IdleState from '../state/player/IdleState.js';
 import WalkingState from '../state/player/WalkingState.js';
 import OverworldStrategy from '../strategy/player/OverworldStrategy.js';
 
-// 512, 288, -5500, -1500, 1024, 576
 class Player extends GameObject {
     constructor(x, y, width, height, context, canvasWidth, canvasHeight, animations, mapCollision, camera) {
         super(x, y, width, height);
@@ -21,7 +20,7 @@ class Player extends GameObject {
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
-        this.velocity = 15;
+        this.velocity = 5;
         this.init();
     }
 

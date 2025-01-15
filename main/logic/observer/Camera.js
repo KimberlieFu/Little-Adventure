@@ -14,6 +14,8 @@ class Camera {
     this.y = startY;
     this.velocity = 1;
     this.cameraPan = false;
+    this.offsetX = 1000;
+    this.offsetY = 1000;
   }
 
   setVelocity(velocity) {
@@ -27,9 +29,11 @@ class Camera {
     const cameraboxUpSide = this.camerabox.position.y;
     const cameraboxDownSide = this.camerabox.position.y + this.camerabox.height;
 
+
+
     // Pan right
-    if (cameraboxRightSide >= this.canvasWidth && Math.abs(this.x) < this.mapWidth - this.canvasWidth && 
-       (player.direction === 'right' || player.direction === 'up-right' || player.direction === 'down-right')) {
+    if (cameraboxRightSide >= this.canvasWidth && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+       (player.direction === 'right')) {
         const newCameraX = this.x - this.velocity;
         const newPlayerX = player.x + this.velocity;
 
@@ -40,7 +44,7 @@ class Camera {
     }
     // Pan left
     if (cameraboxLeftSide < 0 && this.x < 0 && 
-       (player.direction === 'left' || player.direction === 'up-left' || player.direction === 'down-left')) {
+       (player.direction === 'left')) {
         const newCameraX = this.x + this.velocity;
         const newPlayerX = player.x - this.velocity;
 
@@ -50,8 +54,8 @@ class Camera {
         }
     }
     // Pan up
-    if (cameraboxUpSide < 0 && this.y < 0 &&
-      (player.direction === 'up' || player.direction === 'up-left' || player.direction === 'up-right')) {
+    if (cameraboxUpSide < 0 && this.y < 0 && 
+      (player.direction === 'up')) {
         const newCameraY = this.y + this.velocity;
         const newPlayerY = player.y - this.velocity;
 
@@ -62,7 +66,7 @@ class Camera {
     }
     // Pan down
     if (cameraboxDownSide >= this.canvasHeight && Math.abs(this.y) < this.mapHeight - this.canvasHeight &&
-       (player.direction === 'down' || player.direction === 'down-left' || player.direction === 'down-right')) {
+       (player.direction === 'down')) {
         const newCameraY = this.y - this.velocity;
         const newPlayerY = player.y + this.velocity;
 
@@ -71,6 +75,67 @@ class Camera {
             cameraMove = true;
         }
     }
+
+    // Pan up-right
+    if ((cameraboxUpSide < 0 || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+       (player.direction === 'up-right')) {
+        const newCameraX = this.x - this.velocity;
+        const newCameraY = this.y + this.velocity;
+        const newPlayerX = player.x + this.velocity;
+        const newPlayerY = player.y - this.velocity;
+
+        if (!player.movementStrategy.checkCollision(player, newPlayerX, newPlayerY) && !player.movementStrategy.checkCollision(player, newPlayerX, player.y)) {
+            this.x = newCameraX; 
+            this.y = newCameraY;
+            cameraMove = true;
+        }
+    }
+
+    // Pan down-right
+    if ((cameraboxDownSide >= this.canvasHeight || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+       (player.direction === 'down-right')) {
+        const newCameraX = this.x - this.velocity;
+        const newCameraY = this.y - this.velocity;
+        const newPlayerX = player.x + this.velocity;
+        const newPlayerY = player.y + this.velocity;
+
+        if (!player.movementStrategy.checkCollision(player, newPlayerX, newPlayerY) && !player.movementStrategy.checkCollision(player, newPlayerX, player.y)) {
+            this.x = newCameraX; 
+            this.y = newCameraY;
+            cameraMove = true;
+        }
+    }
+
+    // Pan up-left
+    if ((cameraboxDownSide >= this.canvasHeight || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+       (player.direction === 'up-left')) {
+        const newCameraX = this.x + this.velocity;
+        const newCameraY = this.y + this.velocity;
+        const newPlayerX = player.x - this.velocity;
+        const newPlayerY = player.y - this.velocity;
+
+        if (!player.movementStrategy.checkCollision(player, newPlayerX, newPlayerY) && !player.movementStrategy.checkCollision(player, newPlayerX, player.y)) {
+            this.x = newCameraX; 
+            this.y = newCameraY;
+            cameraMove = true;
+        }
+    }
+
+    // Pan down-left
+    if ((cameraboxDownSide >= this.canvasHeight || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+       (player.direction === 'down-left')) {
+        const newCameraX = this.x + this.velocity;
+        const newCameraY = this.y - this.velocity;
+        const newPlayerX = player.x - this.velocity;
+        const newPlayerY = player.y + this.velocity;
+
+        if (!player.movementStrategy.checkCollision(player, newPlayerX, newPlayerY) && !player.movementStrategy.checkCollision(player, newPlayerX, player.y)) {
+            this.x = newCameraX; 
+            this.y = newCameraY;
+            cameraMove = true;
+        }
+    }
+
     if (cameraMove) {
       this.cameraPan = true;
       return;
@@ -95,14 +160,6 @@ class Camera {
         this.camerabox.width,
         this.camerabox.height
     );
-
-
-    context.beginPath();
-    context.moveTo(this.camerabox.position.x + this.camerabox.width, this.camerabox.position.y); // Top right corner
-    context.lineTo(this.camerabox.position.x + this.camerabox.width, this.camerabox.position.y + this.camerabox.height); // Bottom right corner
-    context.strokeStyle = "blue"; // Use a different color for clarity
-    context.stroke();
-
     context.restore();
   }
 

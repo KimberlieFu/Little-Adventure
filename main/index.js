@@ -49,22 +49,26 @@ async function initializeGame() {
 // Animation loop
 function animate() {
     c.clearRect(0, 0, canvas.width, canvas.height);
-    c.drawImage(mainMap, mapPositionX, mapPositionY);
-   
 
-    camera.draw(c);
-    mapPositionX = camera.x;
-    mapPositionY = camera.y;
+    c.save();
+    c.translate(camera.x, camera.y);
+    c.drawImage(mainMap, 0, 0);
+    c.restore();
 
+    camera.draw(c)
     mapCollision.forEach(row => {
         row.forEach((boundary) => {
             boundary.update(camera);
-        })
-    })
-    
+        });
+    });
+
+    // Draw and update the player
     player.update();
     player.animate();
     player.handleInput();
+
+
+
     requestAnimationFrame(animate);
 }
 

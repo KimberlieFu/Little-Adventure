@@ -4,7 +4,7 @@ class IdleState extends PlayerState {
     constructor(player) {
         super(player);
         this.frameTimer = 0; 
-        this.frameDelay = 20; 
+        this.frameDelay = 15; 
         this.loopFrames = player.animations.idle.loopFrames || 16; 
         this.totalFrames = 16;
         this.player.setAnimation('idle');
