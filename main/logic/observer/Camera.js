@@ -29,8 +29,6 @@ class Camera {
     const cameraboxUpSide = this.camerabox.position.y;
     const cameraboxDownSide = this.camerabox.position.y + this.camerabox.height;
 
-
-
     // Pan right
     if (cameraboxRightSide >= this.canvasWidth && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
        (player.direction === 'right')) {
@@ -75,7 +73,6 @@ class Camera {
             cameraMove = true;
         }
     }
-
     // Pan up-right
     if ((cameraboxUpSide < 0 || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
        (player.direction === 'up-right')) {
@@ -90,7 +87,6 @@ class Camera {
             cameraMove = true;
         }
     }
-
     // Pan down-right
     if ((cameraboxDownSide >= this.canvasHeight || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
        (player.direction === 'down-right')) {
@@ -105,9 +101,8 @@ class Camera {
             cameraMove = true;
         }
     }
-
     // Pan up-left
-    if ((cameraboxDownSide >= this.canvasHeight || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+    if ((cameraboxUpSide < 0 || cameraboxLeftSide < 0) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
        (player.direction === 'up-left')) {
         const newCameraX = this.x + this.velocity;
         const newCameraY = this.y + this.velocity;
@@ -120,9 +115,8 @@ class Camera {
             cameraMove = true;
         }
     }
-
     // Pan down-left
-    if ((cameraboxDownSide >= this.canvasHeight || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+    if ((cameraboxDownSide >= this.canvasHeight || cameraboxLeftSide < 0) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
        (player.direction === 'down-left')) {
         const newCameraX = this.x + this.velocity;
         const newCameraY = this.y - this.velocity;
@@ -135,7 +129,6 @@ class Camera {
             cameraMove = true;
         }
     }
-
     if (cameraMove) {
       this.cameraPan = true;
       return;
