@@ -20,7 +20,7 @@ class Player extends GameObject {
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
-        this.velocity = 5;
+        this.velocity = 3;
         this.init();
     }
 
@@ -97,29 +97,29 @@ class Player extends GameObject {
             0,
             frameWidth,
             animation.image.height,
-            this.x - this.width / 2,
-            this.y - this.height / 2,
-            this.width,
-            this.height
+            this.x - (this.width * 2.1) / 2,  
+            this.y - (this.height * 2.1) * 0.75,  
+            this.width * 2.1,                
+            this.height * 2.1              
         );
 
 
-        // Draw a green box around the player
-        this.context.strokeStyle = 'green';
-        this.context.lineWidth = 2;       
-        this.context.strokeRect(
-            this.x - this.width / 2,     
-            this.y - this.height / 2,    
-            this.width,                   
-            this.height                  
-        );
+        // // Draw a green box around the player
+        // this.context.strokeStyle = 'green';
+        // this.context.lineWidth = 2;       
+        // this.context.strokeRect(
+        //     this.x - this.width / 2,     
+        //     this.y - this.height / 2,    
+        //     this.width,                   
+        //     this.height                  
+        // );
 
      
-        this.context.beginPath();
-        this.context.arc(this.x, this.y, 5, 0, 2 * Math.PI);
-        this.context.fillStyle = 'blue';
-        this.context.fill();
-        this.context.closePath();
+        // this.context.beginPath();
+        // this.context.arc(this.x, this.y, 5, 0, 2 * Math.PI);
+        // this.context.fillStyle = 'blue';
+        // this.context.fill();
+        // this.context.closePath();
     }
 }
 

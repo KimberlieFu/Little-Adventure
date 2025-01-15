@@ -4,7 +4,7 @@ class WalkingState extends PlayerState {
     constructor(player) {
         super(player);
         this.frameTimer = 0;
-        this.frameDelay = 1;
+        this.frameDelay = 3;
 
         const direction = this.getAnimationDirection();
         this.loopFrames = player.animations[direction].loopFrames || 16;

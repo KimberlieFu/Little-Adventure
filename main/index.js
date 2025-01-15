@@ -55,19 +55,15 @@ function animate() {
     c.drawImage(mainMap, 0, 0);
     c.restore();
 
-    camera.draw(c)
     mapCollision.forEach(row => {
         row.forEach((boundary) => {
             boundary.update(camera);
         });
     });
 
-    // Draw and update the player
     player.update();
     player.animate();
     player.handleInput();
-
-
 
     requestAnimationFrame(animate);
 }
