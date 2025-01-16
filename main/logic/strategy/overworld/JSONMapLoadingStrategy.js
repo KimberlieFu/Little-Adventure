@@ -25,8 +25,8 @@ class JSONMapLoadingStrategy extends MapLoadingStrategy {
     
             console.log("Map loaded:", mapSection, mapImageSrc);
     
-            return { image: mapImage, mapWidth: mapWidth, mapHeight: mapHeight, canvasWidth: map.width, canvasHeight: map.height, 
-                mapStartX: map.startX, mapStartY: map.startY, mapCollision: map.collision, mapRowTile: map.rowTile, mapPixel: map.pixel, mapZoom: map.zoom};
+            return { image: mapImage, mapForeground: map.foreground, mapWidth: mapWidth, mapHeight: mapHeight, canvasWidth: map.width, canvasHeight: map.height, 
+                mapStartX: map.startX, mapStartY: map.startY, mapCollision: map.collision, mapRowTile: map.rowTile, mapPixel: map.pixel, mapZoom: map.zoom };
     
         } catch (error) {
             console.error('Error loading JSON map:', error);

@@ -74,7 +74,7 @@ class Camera {
         }
     }
     // Pan up-right
-    if ((cameraboxUpSide < 0 || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+    if ((cameraboxUpSide < 0 || cameraboxRightSide >= this.canvasWidth) && this.y < 0 && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
        (player.direction === 'up-right')) {
         const newCameraX = this.x - this.velocity;
         const newCameraY = this.y + this.velocity;
@@ -88,7 +88,7 @@ class Camera {
         }
     }
     // Pan down-right
-    if ((cameraboxDownSide >= this.canvasHeight || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+    if ((cameraboxDownSide >= this.canvasHeight || cameraboxRightSide >= this.canvasWidth) && Math.abs(this.y) < this.mapHeight - this.canvasHeight && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
        (player.direction === 'down-right')) {
         const newCameraX = this.x - this.velocity;
         const newCameraY = this.y - this.velocity;
@@ -102,7 +102,7 @@ class Camera {
         }
     }
     // Pan up-left
-    if ((cameraboxUpSide < 0 || cameraboxLeftSide < 0) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+    if ((cameraboxUpSide < 0 || cameraboxLeftSide < 0) && this.y < 0 && this.x < 0 && 
        (player.direction === 'up-left')) {
         const newCameraX = this.x + this.velocity;
         const newCameraY = this.y + this.velocity;
@@ -116,7 +116,7 @@ class Camera {
         }
     }
     // Pan down-left
-    if ((cameraboxDownSide >= this.canvasHeight || cameraboxLeftSide < 0) && Math.abs(this.x) < this.mapWidth - this.canvasWidth &&
+    if ((cameraboxDownSide >= this.canvasHeight || cameraboxLeftSide < 0) && Math.abs(this.y) < this.mapHeight - this.canvasHeight && this.x < 0 && 
        (player.direction === 'down-left')) {
         const newCameraX = this.x + this.velocity;
         const newCameraY = this.y - this.velocity;

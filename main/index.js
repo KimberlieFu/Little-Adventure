@@ -2,9 +2,8 @@ import { initializeGameAssets } from './logic/map/LoadConfig.js';
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
-let mainMap, player, camera;
+let mainMap, mainForeground, player, camera;
 let mapPositionX, mapPositionY, mapCollision, mapWidth, mapHeight;
-let aspectRatio; 
 let isMapLoaded = false, isInitialized = false;
 
 
@@ -13,14 +12,13 @@ async function initializeGame() {
         const assets = await initializeGameAssets(canvas, c);
 
         mainMap = assets.mapImage;
+        mainForeground = assets.mapForeground;
         player = assets.player;
         camera = assets.camera;
         mapWidth = assets.mapWidth;
         mapHeight = assets.mapHeight;
         mapCollision = assets.mapCollision;
-        aspectRatio = assets.aspectRatio;
         mapPositionX, mapPositionY = 0, 0;
-
 
         const onLoadHandler = () => {
             isMapLoaded = true;
@@ -64,6 +62,15 @@ function animate() {
     player.update();
     player.animate();
     player.handleInput();
+
+    c.save();
+    c.translate(camera.x, camera.y);
+    c.drawImage(mainForeground, 0, 0);
+    c.restore();
+
+
+  
+
 
     requestAnimationFrame(animate);
 }

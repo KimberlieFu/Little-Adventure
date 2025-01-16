@@ -21,11 +21,12 @@ export async function initializeGameAssets(canvas, c) {
     try {
         const { map, playerConfig } = await loadMapConfig();
         const imageSrc = map.image instanceof HTMLImageElement ? map.image.src : map.image;
+        const foregroundSrc = map.mapForeground instanceof HTMLImageElement ? map.mapForeground.src : map.mapForeground;
 
         const mapImage = await loadImage(imageSrc);
+        const mapForeground = await loadImage(foregroundSrc);
         const mapWidth = map.mapWidth;
         const mapHeight = map.mapHeight;
-        const aspectRatio = mapWidth / mapHeight;        
         const mapCollision = loadCollisionMap(map.mapRowTile, map.mapCollision, map.mapPixel, map.mapPixel, map.mapZoom, c);
         
         const camera = new Camera(map.canvasWidth, map.canvasHeight, map.mapWidth, map.mapHeight, map.mapStartX, map.mapStartY);
@@ -47,7 +48,7 @@ export async function initializeGameAssets(canvas, c) {
         player.addObserver(camera);
         camera.setVelocity(player.velocity);
 
-        return { mapImage, mapWidth, mapHeight, mapCollision, camera, player, aspectRatio };  
+        return { mapImage, mapForeground, mapWidth, mapHeight, mapCollision, camera, player };  
     } catch (error) {
         console.error('Error initializing game assets:', error);
         throw error;
