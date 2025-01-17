@@ -23,7 +23,7 @@ export class MainMap extends MapState {
             this.mapWidth = assets.mapWidth;
             this.mapHeight = assets.mapHeight;
             this.mapCollision = assets.mapCollision;
-            this.mapTempleEntrance = assets.mapTempleEntrance;
+            this.mapEntrance = assets.mapEntrance;
 
             this.mainMap.onload = this.onLoad.bind(this);
             this.mainMap.onerror = (error) => console.error('Error loading map image:', error);
@@ -48,42 +48,34 @@ export class MainMap extends MapState {
 
     update() {
         this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        this.c.save();
-        this.c.translate(this.camera.x, this.camera.y);
-        this.c.drawImage(this.mainMap, 0, 0);
-        this.c.restore();
+        this.c.drawImage(this.mainMap, this.camera.x, this.camera.y);
 
         this.mapCollision.forEach(row => {
             row.forEach((boundary) => {
                 boundary.update(this.camera);
             });
         });
-
+    
         this.player.update();
         this.player.animate();
         this.player.handleInput();
-
-        this.c.save();
-        this.c.translate(this.camera.x, this.camera.y);
-        this.c.drawImage(this.mainForeground, 0, 0);
-        this.c.restore();
-
+    
+        this.c.drawImage(this.mainForeground, this.camera.x, this.camera.y);
+    
         let nearestDistance = Infinity;
-        this.mapTempleEntrance.forEach(row => {
-            row.forEach((entrance) => {
-                const distance = entrance.update(this.camera, this.player, false);
-                if (distance < nearestDistance) {
-                    nearestDistance = distance;
-                    this.closestEntrance = entrance;
-                }
-            });
-        });
-
-        if (this.closestEntrance) {
-            this.closestEntrance.update(this.camera, this.player, true);
-        }
-
+        // for (const entrance of this.mapEntrance) {
+        //     const distance = entrance.update(this.camera, this.player);
+            
+        //     if (distance < nearestDistance) {
+        //         nearestDistance = distance; 
+        //         this.closestEntrance = entrance; 
+        //     }
+        // }
+        
+        // if (this.closestEntrance) {
+        //     this.closestEntrance.update(this.camera, this.player, true);
+        // }
+    
         requestAnimationFrame(this.update.bind(this));
     }
 }
