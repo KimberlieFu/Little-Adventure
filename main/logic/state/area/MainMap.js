@@ -1,5 +1,6 @@
 import MapState from "./MapState.js";
-import { initializeGameAssets } from "../../map/LoadConfig.js";
+import { initializeMainMapGameAssets } from "../../map/LoadConfig.js";
+
 
 export class MainMap extends MapState {
     constructor(canvas, c) {
@@ -8,11 +9,12 @@ export class MainMap extends MapState {
         this.c = c;
         this.isInitialized = false;
         this.isMapLoaded = false;
+        this.closestEntrance = null;
     }
 
     async loadAssets() {
         try {
-            const assets = await initializeGameAssets(this.canvas, this.c);
+            const assets = await initializeMainMapGameAssets(this.canvas, this.c);
 
             this.mainMap = assets.mapImage;
             this.mainForeground = assets.mapForeground;
@@ -21,6 +23,7 @@ export class MainMap extends MapState {
             this.mapWidth = assets.mapWidth;
             this.mapHeight = assets.mapHeight;
             this.mapCollision = assets.mapCollision;
+            this.mapTempleEntrance = assets.mapTempleEntrance;
 
             this.mainMap.onload = this.onLoad.bind(this);
             this.mainMap.onerror = (error) => console.error('Error loading map image:', error);
@@ -65,6 +68,21 @@ export class MainMap extends MapState {
         this.c.translate(this.camera.x, this.camera.y);
         this.c.drawImage(this.mainForeground, 0, 0);
         this.c.restore();
+
+        let nearestDistance = Infinity;
+        this.mapTempleEntrance.forEach(row => {
+            row.forEach((entrance) => {
+                const distance = entrance.update(this.camera, this.player, false);
+                if (distance < nearestDistance) {
+                    nearestDistance = distance;
+                    this.closestEntrance = entrance;
+                }
+            });
+        });
+
+        if (this.closestEntrance) {
+            this.closestEntrance.update(this.camera, this.player, true);
+        }
 
         requestAnimationFrame(this.update.bind(this));
     }

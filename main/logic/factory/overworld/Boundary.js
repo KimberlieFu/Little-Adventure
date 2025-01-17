@@ -1,4 +1,4 @@
-import GameObject from './GameObject.js';
+import GameObject from '../../map/GameObject.js';
 
 class Boundary extends GameObject {
     constructor(x, y, width, height, zoom, context) {
@@ -16,10 +16,6 @@ class Boundary extends GameObject {
     update(camera) {
         this.adjustedX = this.originalX + camera.x;
         this.adjustedY = this.originalY + camera.y;
-        
-        // this.context.fillStyle = "rgba(255, 0, 0, 0.5)";
-        // this.context.fillRect(this.adjustedX, this.adjustedY, this.width, this.height);
-    
     }
 }
 

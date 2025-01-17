@@ -1,7 +1,7 @@
 import MapLoadingStrategy from "./MapLoadingStrategy.js";
 
 class JSONMapLoadingStrategy extends MapLoadingStrategy {
-    async loadMap(mapFile, mapSection = "main") { 
+    async loadMainMap(mapFile, mapSection = "main") { 
         try {
             const response = await fetch(mapFile);
             const mapConfig = await response.json();
@@ -26,7 +26,7 @@ class JSONMapLoadingStrategy extends MapLoadingStrategy {
             console.log("Map loaded:", mapSection, mapImageSrc);
     
             return { image: mapImage, mapForeground: map.foreground, mapWidth: mapWidth, mapHeight: mapHeight, canvasWidth: map.width, canvasHeight: map.height, 
-                mapStartX: map.startX, mapStartY: map.startY, mapCollision: map.collision, mapRowTile: map.rowTile, mapPixel: map.pixel, mapZoom: map.zoom };
+                mapStartX: map.startX, mapStartY: map.startY, mapCollision: map.collision, mapTempleEntrance: map.TempleEntrance, mapRowTile: map.rowTile, mapPixel: map.pixel, mapZoom: map.zoom };
     
         } catch (error) {
             console.error('Error loading JSON map:', error);

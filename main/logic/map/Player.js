@@ -20,7 +20,7 @@ class Player extends GameObject {
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
-        this.velocity = 3;
+        this.velocity = 4;
         this.init();
     }
 

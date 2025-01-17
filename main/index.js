@@ -8,5 +8,5 @@ async function start() {
     await mapLoader.initializeMap();
     mapLoader.update(); 
 }
-
+     
 start();

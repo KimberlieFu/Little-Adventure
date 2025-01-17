@@ -2,12 +2,12 @@ import JSONMapLoadingStrategy from '../strategy/overworld/JSONMapLoadingStrategy
 import Player from './Player.js';
 import Camera from '../observer/Camera.js'
 import IdleState from '../state/player/IdleState.js';
-import Boundary from './Boundary.js';
+import { BlockFactory } from '../factory/overworld/BlockFactory.js';
 
-export async function loadMapConfig() {
+export async function loadMainMapConfig() {
     try {
         const mapLoadingStrategy = new JSONMapLoadingStrategy();  
-        const map = await mapLoadingStrategy.loadMap('file/MapConfig.json', 'main'); 
+        const map = await mapLoadingStrategy.loadMainMap('file/MapConfig.json', 'main'); 
         const playerConfig = await mapLoadingStrategy.getPlayerConfig('file/MapConfig.json', 'main');
 
         return { map, playerConfig };
@@ -17,9 +17,9 @@ export async function loadMapConfig() {
     }
 }
 
-export async function initializeGameAssets(canvas, c) {
+export async function initializeMainMapGameAssets(canvas, c) {
     try {
-        const { map, playerConfig } = await loadMapConfig();
+        const { map, playerConfig } = await loadMainMapConfig();
         const imageSrc = map.image instanceof HTMLImageElement ? map.image.src : map.image;
         const foregroundSrc = map.mapForeground instanceof HTMLImageElement ? map.mapForeground.src : map.mapForeground;
 
@@ -27,7 +27,8 @@ export async function initializeGameAssets(canvas, c) {
         const mapForeground = await loadImage(foregroundSrc);
         const mapWidth = map.mapWidth;
         const mapHeight = map.mapHeight;
-        const mapCollision = loadCollisionMap(map.mapRowTile, map.mapCollision, map.mapPixel, map.mapPixel, map.mapZoom, c);
+        const mapCollision = loadMap(1, map.mapRowTile, map.mapCollision, map.mapPixel, map.mapPixel, map.mapZoom, c);
+        const mapTempleEntrance = loadMap(2, map.mapRowTile, map.mapTempleEntrance, map.mapPixel, map.mapPixel, map.mapZoom, c);
         
         const camera = new Camera(map.canvasWidth, map.canvasHeight, map.mapWidth, map.mapHeight, map.mapStartX, map.mapStartY);
         const loadedAnimations = await loadCharacterAnimations();
@@ -48,7 +49,7 @@ export async function initializeGameAssets(canvas, c) {
         player.addObserver(camera);
         camera.setVelocity(player.velocity);
 
-        return { mapImage, mapForeground, mapWidth, mapHeight, mapCollision, camera, player };  
+        return { mapImage, mapForeground, mapWidth, mapHeight, mapCollision, mapTempleEntrance, camera, player };  
     } catch (error) {
         console.error('Error initializing game assets:', error);
         throw error;
@@ -89,15 +90,15 @@ function loadImage(src) {
     });
 }
 
-function loadCollisionMap(rowTile, mapCollision, width, height, zoom, context) {
-    const numRows = Math.ceil(mapCollision.length / rowTile);
+function loadMap(type, rowTile, mapBlock, width, height, zoom, context) {
+    const numRows = Math.ceil(mapBlock.length / rowTile);
     const collisionMap2D = [];
     const boundaryMap2D = [];
 
     for (let row = 0; row < numRows; row++) {
         const rowStart = row * rowTile; 
-        const rowEnd = Math.min(rowStart + rowTile, mapCollision.length); 
-        const rowData = mapCollision.slice(rowStart, rowEnd);
+        const rowEnd = Math.min(rowStart + rowTile, mapBlock.length); 
+        const rowData = mapBlock.slice(rowStart, rowEnd);
         collisionMap2D.push(rowData); 
     }
 
@@ -105,7 +106,8 @@ function loadCollisionMap(rowTile, mapCollision, width, height, zoom, context) {
         const boundaryRow = []; 
         row.forEach((symbol, j) => {
             if (symbol !== 0) {
-                boundaryRow.push(new Boundary(j, i, width, height, zoom, context)); 
+                const block = BlockFactory.createBlock(type, j, i, width, height, zoom, context);
+                boundaryRow.push(block); 
             }
         });
         boundaryMap2D.push(boundaryRow);
