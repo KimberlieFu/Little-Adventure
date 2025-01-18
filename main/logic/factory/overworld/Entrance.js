@@ -1,17 +1,19 @@
 import GameObject from '../../map/GameObject.js';
 
 class Entrance extends GameObject {
-    constructor(x, y, width, height, zoom, context) {
+    constructor(x, y, width, height, blockWidth, blockheight, zoom, context) {
         super(x, y, width, height);
         this.zoom = zoom / 100;
-        this.width = width * this.zoom;
-        this.height = height * this.zoom;
+        this.width = width * blockWidth * this.zoom;
+        this.height = height * blockheight * this.zoom;
         this.originalX = x * width * this.zoom;
         this.originalY = y * height * this.zoom;
         this.adjustedX = 0;
         this.adjustedY = 0;
         this.context = context;
         this.type = "generic"; 
+        
+        console.log(this.originalX, this.originalY)
     }
 
     update(camera, player) {

@@ -24,6 +24,7 @@ export class MainMap extends MapState {
             this.mapHeight = assets.mapHeight;
             this.mapCollision = assets.mapCollision;
             this.mapEntrance = assets.mapEntrance;
+            console.log(this.mapEntrance)
 
             this.mainMap.onload = this.onLoad.bind(this);
             this.mainMap.onerror = (error) => console.error('Error loading map image:', error);
@@ -61,20 +62,16 @@ export class MainMap extends MapState {
         this.player.handleInput();
     
         this.c.drawImage(this.mainForeground, this.camera.x, this.camera.y);
-    
+
         let nearestDistance = Infinity;
-        // for (const entrance of this.mapEntrance) {
-        //     const distance = entrance.update(this.camera, this.player);
-            
-        //     if (distance < nearestDistance) {
-        //         nearestDistance = distance; 
-        //         this.closestEntrance = entrance; 
-        //     }
-        // }
+        this.mapEntrance.forEach(entrance => {
+            entrance.update(this.camera, this.player);
+        });
+
         
-        // if (this.closestEntrance) {
-        //     this.closestEntrance.update(this.camera, this.player, true);
-        // }
+        if (this.closestEntrance) {
+            this.closestEntrance.update(this.camera, this.player, true);
+        }
     
         requestAnimationFrame(this.update.bind(this));
     }

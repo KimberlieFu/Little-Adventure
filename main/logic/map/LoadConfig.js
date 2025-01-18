@@ -23,12 +23,17 @@ export async function initializeMainMapGameAssets(canvas, c) {
         const imageSrc = map.image instanceof HTMLImageElement ? map.image.src : map.image;
         const foregroundSrc = map.mapForeground instanceof HTMLImageElement ? map.mapForeground.src : map.mapForeground;
 
+        const mapEntrance = [];
+
         const mapImage = await loadImage(imageSrc);
         const mapForeground = await loadImage(foregroundSrc);
         const mapWidth = map.mapWidth;
         const mapHeight = map.mapHeight;
         const mapCollision = loadMap(1, map.mapRowTile, map.mapCollision, map.mapPixel, map.mapPixel, map.mapZoom, c);
-        const mapTempleEntrance = loadMap(2, map.mapRowTile, map.mapTempleEntrance, map.mapPixel, map.mapPixel, map.mapZoom, c);
+        const mapTemple = map.mapEntrance.temple;
+        const mapTempleEntrance = BlockFactory.createBlock(2, mapTemple.x, mapTemple.y, map.mapPixel, map.mapPixel, mapTemple.width, mapTemple.height, map.mapZoom, c);
+        mapEntrance.push(mapTempleEntrance)
+        
         
         const camera = new Camera(map.canvasWidth, map.canvasHeight, map.mapWidth, map.mapHeight, map.mapStartX, map.mapStartY);
         const loadedAnimations = await loadCharacterAnimations();
@@ -49,7 +54,7 @@ export async function initializeMainMapGameAssets(canvas, c) {
         player.addObserver(camera);
         camera.setVelocity(player.velocity);
 
-        return { mapImage, mapForeground, mapWidth, mapHeight, mapCollision, mapTempleEntrance, camera, player };  
+        return { mapImage, mapForeground, mapWidth, mapHeight, mapCollision, mapEntrance, camera, player };  
     } catch (error) {
         console.error('Error initializing game assets:', error);
         throw error;
@@ -106,7 +111,7 @@ function loadMap(type, rowTile, mapBlock, width, height, zoom, context) {
         const boundaryRow = []; 
         row.forEach((symbol, j) => {
             if (symbol !== 0) {
-                const block = BlockFactory.createBlock(type, j, i, width, height, zoom, context);
+                const block = BlockFactory.createBlock(type, j, i, width, height, 1, 1, zoom, context);
                 boundaryRow.push(block); 
             }
         });
