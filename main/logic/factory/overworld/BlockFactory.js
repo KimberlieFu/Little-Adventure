@@ -1,5 +1,4 @@
 import Boundary from "./Boundary.js";
-import Entrance from "./Entrance.js";
 import TempleEntrance from "./TempleEntrance.js";
 
 export class BlockFactory {

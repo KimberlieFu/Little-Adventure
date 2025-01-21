@@ -49,6 +49,33 @@ class JSONMapLoadingStrategy extends MapLoadingStrategy {
             console.error('Error retrieving player config:', error);
         }
     }
+
+    async loadFonts(fontConfigFile, language) {
+        try {
+            const response = await fetch(fontConfigFile);
+            const fontConfig = await response.json();
+    
+            const fonts = fontConfig[language];
+            if (!fonts) {
+                throw new Error(`Fonts for language "${language}" not found in the configuration.`);
+            }
+    
+            const fontPromises = Object.entries(fonts).map(([style, fontPath]) => {
+                const fontFace = new FontFace(`${language}-${style}`, `url(${fontPath})`);
+                return fontFace.load().then((loadedFont) => {
+                    document.fonts.add(loadedFont);
+                    console.log(`Font loaded: ${language}-${style}`);
+                    return loadedFont; 
+                });
+            });
+    
+            const loadedFonts = await Promise.all(fontPromises);
+            console.log(`All fonts for language "${language}" loaded.`);
+            return loadedFonts; 
+        } catch (error) {
+            console.error('Error loading fonts:', error);
+        }
+    }
 }
 
 export default JSONMapLoadingStrategy

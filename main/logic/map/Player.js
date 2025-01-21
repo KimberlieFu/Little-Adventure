@@ -2,6 +2,7 @@ import GameObject from './GameObject.js';
 import IdleState from '../state/player/IdleState.js';
 import WalkingState from '../state/player/WalkingState.js';
 import OverworldStrategy from '../strategy/player/OverworldStrategy.js';
+// https://www.dropbox.com/scl/fo/2nrcckf8i2z4wubbd0i22/ALAOrYJK_3MbfQmQDgkiv80?rlkey=sgx59l46hkndb2lzz7c3k8gp2&dl=0
 
 class Player extends GameObject {
     constructor(x, y, width, height, context, canvasWidth, canvasHeight, animations, mapCollision, camera) {
@@ -20,7 +21,7 @@ class Player extends GameObject {
         this.direction = null;
         this.currentAnimation = 'idle';
         this.observers = []; 
-        this.velocity = 5;
+        this.velocity = 3;
         this.init();
     }
 

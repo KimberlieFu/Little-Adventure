@@ -1,5 +1,5 @@
 import MapState from "./MapState.js";
-import { initializeMainMapGameAssets } from "../../map/LoadConfig.js";
+import { initializeMainMapGameAssets, InitializeFonts } from "../../map/LoadConfig.js";
 
 
 export class MainMap extends MapState {
@@ -15,6 +15,7 @@ export class MainMap extends MapState {
     async loadAssets() {
         try {
             const assets = await initializeMainMapGameAssets(this.canvas, this.c);
+            const { regularFont, boldFont, blackFont } = await InitializeFonts("cn", this.c);
 
             this.mainMap = assets.mapImage;
             this.mainForeground = assets.mapForeground;
@@ -24,7 +25,12 @@ export class MainMap extends MapState {
             this.mapHeight = assets.mapHeight;
             this.mapCollision = assets.mapCollision;
             this.mapEntrance = assets.mapEntrance;
-            console.log(this.mapEntrance)
+            
+            this.font = {
+                regular: regularFont,
+                bold: boldFont,
+                black: blackFont
+            };
 
             this.mainMap.onload = this.onLoad.bind(this);
             this.mainMap.onerror = (error) => console.error('Error loading map image:', error);
@@ -32,6 +38,10 @@ export class MainMap extends MapState {
             if (this.mainMap.complete) {
                 this.isMapLoaded = true;
                 this.onLoad();
+            }
+
+            if (this.font) {
+                this.applyFontToCanvas(this.font.regular);
             }
 
             console.log('Game assets loaded successfully.');
@@ -47,6 +57,37 @@ export class MainMap extends MapState {
         console.log('Map loaded successfully.');
     }
 
+
+    applyFontToCanvas(font) {
+        if (font) {
+            this.c.font = `30px ${font.family}`;
+            console.log(`Font applied: ${font.family}`);
+        } else {
+            console.error('Font is not available.');
+        }
+    }
+
+    // Function to draw sample text on the canvas
+    drawSampleText() {
+        if (this.isInitialized) {
+            if (this.c) {
+                this.c.font = `30px ${this.font.regular.family}`;
+
+                this.c.fillText("常规字体的示例文本", 100, 100);
+
+                this.c.font = `30px ${this.font.bold.family}`;
+                this.c.fillText("粗体字体的示例文本", 100, 150);
+
+                this.c.font = `30px ${this.font.black.family}`;
+                this.c.fillText("黑体字体的示例文本", 100, 200);
+            } else {
+                console.error('Canvas context (c) is undefined.');
+            }
+        }
+    }
+
+
+
     update() {
         this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.c.drawImage(this.mainMap, this.camera.x, this.camera.y);
@@ -57,11 +98,6 @@ export class MainMap extends MapState {
             });
         });
     
-        this.player.update();
-        this.player.animate();
-        this.player.handleInput();
-    
-        this.c.drawImage(this.mainForeground, this.camera.x, this.camera.y);
 
         let nearestDistance = Infinity;
         this.mapEntrance.forEach(entrance => {
@@ -72,7 +108,17 @@ export class MainMap extends MapState {
         if (this.closestEntrance) {
             this.closestEntrance.update(this.camera, this.player, true);
         }
+
+        this.player.update();
+        this.player.animate();
+        this.player.handleInput();
+    
+        this.c.drawImage(this.mainForeground, this.camera.x, this.camera.y);
+        this.drawSampleText()
+
+      
     
         requestAnimationFrame(this.update.bind(this));
     }
 }
+

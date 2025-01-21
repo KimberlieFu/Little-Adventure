@@ -12,8 +12,6 @@ class Entrance extends GameObject {
         this.adjustedY = 0;
         this.context = context;
         this.type = "generic"; 
-        
-        console.log(this.originalX, this.originalY)
     }
 
     update(camera, player) {
@@ -37,8 +35,15 @@ class Entrance extends GameObject {
     displayPopUp(message) {
         this.context.font = "16px Arial";
         this.context.fillStyle = "white";
-        this.context.fillText(message, this.adjustedX, this.adjustedY - 10);
+    
+        const textWidth = this.context.measureText(message).width;
+    
+        const textX = this.adjustedX + this.width / 2 - textWidth / 2;
+        const textY = this.adjustedY - 10;
+    
+        this.context.fillText(message, textX, textY);
     }
+    
 
     getInteractionMessage() {
         return `interact with ${this.type}`;

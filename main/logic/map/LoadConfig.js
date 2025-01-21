@@ -17,6 +17,46 @@ export async function loadMainMapConfig() {
     }
 }
 
+export async function loadFont(language) {
+    try {
+        const mapLoadingStrategy = new JSONMapLoadingStrategy();  
+        const font = await mapLoadingStrategy.loadFonts('file/Font.json', language); 
+
+        return { font };
+    } catch (error) {
+        console.error('Error loading font config:', error);
+        throw error;
+    }
+}
+
+export async function InitializeFonts(language, c) {
+    try {
+        const { font } = await loadFont(language);
+
+        if (!font || font.length === 0) {
+            throw new Error('No fonts loaded.');
+        }
+
+        // Find the different font styles
+        const regularFont = font.find(f => f.family.includes('regular'));
+        const boldFont = font.find(f => f.family.includes('bold'));
+        const blackFont = font.find(f => f.family.includes('black'));
+
+        // Check if we have all the required fonts
+        if (!regularFont || !boldFont || !blackFont) {
+            throw new Error('One or more required font styles are missing.');
+        }
+
+        console.log(`Loaded fonts: ${regularFont.family}, ${boldFont.family}, ${blackFont.family}`);
+        c.font = `30px ${regularFont.family}`;
+        return { regularFont, boldFont, blackFont };
+
+    } catch (error) {
+        console.error('Error initializing fonts:', error);
+        throw error; 
+    }
+}
+
 export async function initializeMainMapGameAssets(canvas, c) {
     try {
         const { map, playerConfig } = await loadMainMapConfig();
@@ -33,7 +73,6 @@ export async function initializeMainMapGameAssets(canvas, c) {
         const mapTemple = map.mapEntrance.temple;
         const mapTempleEntrance = BlockFactory.createBlock(2, mapTemple.x, mapTemple.y, map.mapPixel, map.mapPixel, mapTemple.width, mapTemple.height, map.mapZoom, c);
         mapEntrance.push(mapTempleEntrance)
-        
         
         const camera = new Camera(map.canvasWidth, map.canvasHeight, map.mapWidth, map.mapHeight, map.mapStartX, map.mapStartY);
         const loadedAnimations = await loadCharacterAnimations();

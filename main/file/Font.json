@@ -1,0 +1,13 @@
+{
+    "en" : {
+        "black": "../GameAsset/font/en/Black.otf",
+        "bold" : "../GameAsset/font/en/Bold.otf",
+        "regular": "../GameAsset/font/en/Regular.otf"
+    },
+
+    "cn" : {
+        "black": "../GameAsset/font/cn/Black.otf",
+        "bold" : "../GameAsset/font/cn/Bold.otf",
+        "regular": "../GameAsset/font/cn/Regular.otf"
+    }
+}
