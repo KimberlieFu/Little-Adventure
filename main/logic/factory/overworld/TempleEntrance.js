@@ -6,10 +6,6 @@ class TempleEntrance extends Entrance {
         this.type = "temple";
     }
 
-    getInteractionMessage() {
-        return "enter the temple";
-    }
-
     interact() {
         console.log("You entered the house. Welcome to the Temple!");
     }

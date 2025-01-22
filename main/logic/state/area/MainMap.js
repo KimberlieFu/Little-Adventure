@@ -14,8 +14,8 @@ export class MainMap extends MapState {
 
     async loadAssets() {
         try {
+            const { regularFont, boldFont, blackFont } = await InitializeFonts("en", this.c);
             const assets = await initializeMainMapGameAssets(this.canvas, this.c);
-            const { regularFont, boldFont, blackFont } = await InitializeFonts("cn", this.c);
 
             this.mainMap = assets.mapImage;
             this.mainForeground = assets.mapForeground;
@@ -60,7 +60,7 @@ export class MainMap extends MapState {
 
     applyFontToCanvas(font) {
         if (font) {
-            this.c.font = `30px ${font.family}`;
+            this.c.font = `16px ${font.family}`;
             console.log(`Font applied: ${font.family}`);
         } else {
             console.error('Font is not available.');
@@ -71,20 +71,29 @@ export class MainMap extends MapState {
     drawSampleText() {
         if (this.isInitialized) {
             if (this.c) {
+                // Save the current canvas state
+                this.c.save();
+                
+                // Set font and draw the first sample text
                 this.c.font = `30px ${this.font.regular.family}`;
+                this.c.fillText("test", 100, 100);
 
-                this.c.fillText("常规字体的示例文本", 100, 100);
-
+                // Change font to bold and draw the second sample text
                 this.c.font = `30px ${this.font.bold.family}`;
                 this.c.fillText("粗体字体的示例文本", 100, 150);
 
+                // Change font to black and draw the third sample text
                 this.c.font = `30px ${this.font.black.family}`;
                 this.c.fillText("黑体字体的示例文本", 100, 200);
+
+                // Restore the original canvas state
+                this.c.restore();
             } else {
                 console.error('Canvas context (c) is undefined.');
             }
         }
     }
+
 
 
 
