@@ -14,8 +14,6 @@ class Camera {
     this.y = startY;
     this.velocity = 1;
     this.cameraPan = false;
-    this.offsetX = 1000;
-    this.offsetY = 1000;
   }
 
   setVelocity(velocity) {

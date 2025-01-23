@@ -95,20 +95,19 @@ export class MainMap extends MapState {
     }
 
 
-
-
     update() {
         this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.c.drawImage(this.mainMap, this.camera.x, this.camera.y);
+        const currCameraX = this.camera.x;
+        const currCameraY = this.camera.y;
 
+        this.c.drawImage(this.mainMap, currCameraX, currCameraY);
+        
         this.mapCollision.forEach(row => {
             row.forEach((boundary) => {
                 boundary.update(this.camera);
             });
         });
     
-
-        let nearestDistance = Infinity;
         this.mapEntrance.forEach(entrance => {
             entrance.update(this.camera, this.player);
         });
@@ -121,12 +120,7 @@ export class MainMap extends MapState {
         this.player.update();
         this.player.animate();
         this.player.handleInput();
-    
-        this.c.drawImage(this.mainForeground, this.camera.x, this.camera.y);
-        this.drawSampleText()
-
-      
-    
+        this.c.drawImage(this.mainForeground, currCameraX, currCameraY);
         requestAnimationFrame(this.update.bind(this));
     }
 }
